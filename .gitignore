@@ -1,0 +1,24 @@
+
+###> symfony/framework-bundle ###
+.env
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+.DS_Store
+src/.DS_Store
+*/.DS_Store
+.idea
+.idea/*
+/public/.htaccess
+!/var/cache
+/var/cache/*
+!/var/log/*
+/var/log/*
+!/var/cache/.gitkeep
+**/.DS_Store
+*.cache
