@@ -1,0 +1,45 @@
+{% extends 'admin/_template/layout.html.twig' %}
+
+{% block content %}
+ <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+   <h1 class="h2">Author</h1>
+
+   <div class="col-12">
+    <a class="btn btn-primary btn-sm" href="{{ path('admin_author_new') }}" role="button">New Author</a>
+    <a class="btn btn-primary btn-sm" href="#" role="button">New Book</a>
+   </div>
+  </div>
+
+  <h2>Author Information</h2>
+  <div class="table-responsive">
+
+    <div class="col-lg-8 align-center">
+     <table class="table table-striped ">
+      <thead class="thead-dark">
+
+      <tr>
+       <th>ID#</th>
+       <th>Name</th>
+       <th>Age</th>
+       <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for author in authors %}
+       <tr>
+        <td>{{ author.id }}</td>
+        <td>{{ author.name }}</td>
+        <td>{{ author.age }}</td>
+        <td>
+         <a class="btn btn-primary btn-sm" href="{{ path('admin_author_edit' , {id: author.id}) }}" role="button">Edit</a>
+        </td>
+       </tr>
+      {% endfor %}
+      </tbody>
+     </table>
+
+   </div>
+  </div>
+ </main>
+{% endblock %}
