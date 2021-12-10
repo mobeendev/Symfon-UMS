@@ -24,7 +24,6 @@ class Author
      */
     private $name;
 
-
     /**
      * @ORM\OneToMany(targetEntity=Book::class, mappedBy="author")
      */
@@ -98,6 +97,11 @@ class Author
         $this->age = $age;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
 }

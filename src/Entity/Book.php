@@ -33,6 +33,11 @@ class Book
      */
     private $author;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $price;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +75,18 @@ class Book
     public function setAuthor(?Author $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

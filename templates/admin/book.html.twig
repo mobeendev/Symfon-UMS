@@ -1,0 +1,47 @@
+{% extends 'admin/_template/layout.html.twig' %}
+
+{% block content %}
+ <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+   <h1 class="h2">Book</h1>
+
+   <div class="col-12">
+    <a class="btn btn-primary btn-sm" href="{{ path('admin_book_new') }}" role="button">New Book</a>
+   </div>
+  </div>
+
+  <h2>Book Listing</h2>
+  <div class="table-responsive">
+
+    <div class="col-lg-8 align-center">
+     <table class="table table-striped ">
+      <thead class="thead-dark">
+
+      <tr>
+       <th>ID#</th>
+       <th>Title</th>
+       <th>Topic</th>
+       <th>Author</th>
+       <th>Price</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for book in books %}
+       <tr>
+        <td>{{ book.id }}</td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.topic }}</td>
+        <td>{{ book.author }}</td>
+        <td>{{ book.Price }}</td>
+        <td>
+         <a class="btn btn-primary btn-sm" href="{{ path('admin_book_edit' , {id: book.id}) }}" role="button">Edit</a>
+        </td>
+       </tr>
+      {% endfor %}
+      </tbody>
+     </table>
+
+   </div>
+  </div>
+ </main>
+{% endblock %}
