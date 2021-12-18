@@ -27,4 +27,5 @@ class SecurityController extends AbstractController
     {
         throw new \Exception('logout() should never be reached');
     }
+
 }
