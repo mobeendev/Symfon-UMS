@@ -15,7 +15,13 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
+#            custom_authenticator: App\Security\LoginFormAuthenticator
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                username_parameter: email
+                password_parameter: password
+                enable_csrf: true
             logout: true
             remember_me:
                 secret: '%kernel.secret%'
@@ -24,5 +30,9 @@ security:
             # switch_user: true
 
     access_control:
-        # - { path: ^/Admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/admin/book, roles: ROLE_USER }
+         - { path: ^/admin, roles: ROLE_ADMIN }
+#         - { path: ^/profile, roles: ROLE_USER }
+
+
+
