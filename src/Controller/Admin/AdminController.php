@@ -28,7 +28,7 @@ class AdminController extends BaseController
     public function author(AuthorRepository $authorRepository): Response
     {
         $authors = $authorRepository->findAll();
-
+//    dd('ddd');
         dump($authors);
         return $this->render('admin/author.html.twig', [
             'authors' => $authors,

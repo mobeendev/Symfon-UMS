@@ -15,6 +15,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            entry_point: form_login
 #            custom_authenticator: App\Security\LoginFormAuthenticator
             form_login:
                 login_path: app_login
@@ -27,6 +28,7 @@ security:
                 secret: '%kernel.secret%'
                 signature_properties: [ password , id ]
                 always_remember_me: true
+            custom_authenticator: App\Security\DummyAuthenticator
             # switch_user: true
 
     access_control:

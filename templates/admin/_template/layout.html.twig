@@ -1,83 +1,114 @@
 {% extends 'admin/_template/base.html.twig' %}
-
 {% block body %}
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Dashboard</a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-    <div class="navbar-nav">
-        <div class="nav-item text-nowrap">
-            <a class="nav-link px-3" href="{{ path('app_logout') }}">Log Out</a>
+    <!-- BEGIN: Mobile Menu -->
+    <div class="mobile-menu md:hidden">
+        <div class="mobile-menu-bar">
+            <a href="" class="flex mr-auto">
+                <img alt="123" class="w-6" src="/admin/dist/images/logo.svg">
+            </a>
+            <a href="javascript:;" id="mobile-menu-toggler"> <i data-feather="bar-chart-2" class="w-8 h-8 text-white transform -rotate-90"></i> </a>
+        </div>
+        <ul class="border-t border-theme-24 py-5 hidden">
+            <li>
+                <a href="index.html" class="menu menu--active">
+                    <div class="menu__icon"> <i data-feather="home"></i> </div>
+                    <div class="menu__title"> Dashboard </div>
+                </a>
+            </li>
+            <li>
+                <a href="javascript:;" class="menu">
+                    <div class="menu__icon"> <i data-feather="box"></i> </div>
+                    <div class="menu__title"> Planning <i data-feather="chevron-down" class="menu__sub-icon"></i> </div>
+                </a>
+                <ul class="">
+                    <li>
+                        <a href="index.html" class="menu">
+                            <div class="menu__icon"> <i data-feather="activity"></i> </div>
+                            <div class="menu__title"> Schedules </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="top-menu-light-dashboard.html" class="menu">
+                            <div class="menu__icon"> <i data-feather="activity"></i> </div>
+                            <div class="menu__title"> No Shows / Cancellation</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="simple-menu-light-dashboard.html" class="menu">
+                            <div class="menu__icon"> <i data-feather="activity"></i> </div>
+                            <div class="menu__title"> Service Registry </div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!-- END: Mobile Menu -->
+    <!-- BEGIN: Top Bar -->
+    <div class="border-b border-theme-24 -mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-10">
+        <div class="top-bar-boxed flex items-center">
+            <!-- BEGIN: Logo -->
+            <a href="" class="-intro-x hidden md:flex">
+                <img alt="Midone Tailwind HTML Admin Template" class="w-6" src="/admin/dist/images/logo.svg">
+                <span class="text-white text-lg ml-3"> Mid<span class="font-medium">one</span> </span>
+            </a>
+            <!-- END: Logo -->
+            <!-- BEGIN: Breadcrumb -->
+            <div class="-intro-x breadcrumb breadcrumb--light mr-auto"> <a href="" class="">Application</a> <i data-feather="chevron-right" class="breadcrumb__icon"></i> <a href="" class="breadcrumb--active">Dashboard</a> </div>
+            <!-- END: Breadcrumb -->
+            <!-- BEGIN: Account Menu -->
+            <div class="intro-x dropdown w-8 h-8">
+                <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in scale-110">
+                    <img alt="Midone Tailwind HTML Admin Template" src="/admin/dist/images/profile-13.jpg">
+                </div>
+                <div class="dropdown-box w-56">
+                    <div class="dropdown-box__content box box">
+                        <div class="p-2 border-t border-theme-40 dark:border-dark-3">
+                            <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"> <i data-feather="user" class="w-4 h-4 mr-2"></i> {{ app.user}} </a>
+                        </div>
+                        <div class="p-2 border-t border-theme-40 dark:border-dark-3">
+                            <a href="{{ path('app_logout') }}" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"> <i data-feather="log-out" class="w-4 h-4 mr-2"></i> Logout </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END: Account Menu -->
         </div>
     </div>
-</header>
-<div class="container-fluid">
-    <div class="row">
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-    <div class="position-sticky pt-3">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
-                    <span data-feather="home"></span>
-                    Dashboard
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('admin_author') }}">
-                    Authors
+    <!-- END: Top Bar -->
+    <!-- BEGIN: Top Menu -->
+    {% set current_path = app.request.get('_route') %}
+    <nav class="top-nav">
+        <ul>
+            <li>
+                <a  href="javascript:;"  class=" top-menu {{  current_path == 'admin_index' ? 'top-menu--active'}}"    >
+                    <div class="top-menu__icon"> <i data-feather="home"></i> </div>
+                    <div class="top-menu__title"> Dashboard </div>
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('admin_book') }}">
-                    <span data-feather="layers"></span>
-                    Books
+            <li>
+                <a href="{{ path('admin_book') }}" class=" top-menu {{  current_path == 'admin_book'? 'top-menu--active'}}"    >
+                    <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
+                    <div class="top-menu__title"> Books </div>
                 </a>
             </li>
+
+
+            <li>
+                <a href="{{ path('admin_author') }}" class=" top-menu {{  current_path == 'admin_author'? 'top-menu--active'}}"    >
+                    <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
+                    <div class="top-menu__title"> Authors </div>
+                </a>
+            </li>
+
         </ul>
-
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Saved reports</span>
-            <a class="link-secondary" href="#" aria-label="Add a new report">
-                <span data-feather="plus-circle"></span>
-            </a>
-        </h6>
-        <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Current month
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Last quarter
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Social engagement
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <span data-feather="file-text"></span>
-                    Year-end sale
-                </a>
-            </li>
-        </ul>
+    </nav>
+    <!-- END: Top Menu -->
+    <!-- BEGIN: Content -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+{#        {{ include('/admin/partials/delete-record-modal.html.twig') }}#}
     </div>
-</nav>
-        {% block content %}{% endblock %}
-
-    </div>
-</div>
 {% endblock %}
-
-
-
-
