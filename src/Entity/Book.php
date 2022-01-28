@@ -38,6 +38,11 @@ class Book
      */
     private $price;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $publishedDate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class Book
     public function setPrice(int $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getPublishedDate(): ?\DateTimeInterface
+    {
+        return $this->publishedDate;
+    }
+
+    public function setPublishedDate(\DateTimeInterface $published_date): self
+    {
+        $this->publishedDate = $published_date;
 
         return $this;
     }

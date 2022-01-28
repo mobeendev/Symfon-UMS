@@ -18,7 +18,7 @@
     <div class="col-span-12 sm:col-span-12 md:col-span-4  xs:col-span-12 xl:col-span-4 xxl:col-span-2 intro-y box mt-2 h-12">
      <div class="grid grid-cols-12 gap-5 pos__tabs nav-tabs justify-center flex">
       <div class="col-span-12 flex  items-center">
-       <a data-toggle="tab" data-target="#class" href="{{ path('admin_index') }}"
+       <a data-toggle="tab" data-target="#class" href="{{ path('admin_book_borrowed') }}"
           class="flex-1 py-2 mt-2 flat-md text-center active navigation">New Books</a>
       </div>
      </div>
@@ -26,7 +26,7 @@
     <div class="col-span-12 sm:col-span-12 md:col-span-4  xs:col-span-12 xl:col-span-4 xxl:col-span-3 intro-y box mt-2 h-12">
      <div class="grid grid-cols-12 gap-5 pos__tabs nav-tabs justify-center flex">
       <div class="col-span-12 flex  items-center">
-       <a data-toggle="tab" data-target="#class" href="{{ path('admin_book_borrowed') }}"
+       <a data-toggle="tab" data-target="#class" href="{{ path('admin_index') }}"
           class="flex-1 py-2 mt-2 flat-md text-center navigation">Borrowed Books</a>
       </div>
 
@@ -76,7 +76,9 @@
          - {{ book.title }}
         </div>
         <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> $ {{ book.price }} </div>
-        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> {{ book.publishedDate | date("Y-m-d") }} </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> {{ book.price }} </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> GGG </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> GGG </div>
         <div class="items-center ml-auto mr-auto  ml-1   pl-2 py-6 mt-3   {{ color }}">
          22
         </div>
@@ -102,6 +104,86 @@
           </div>
          </div>
         </div>
+       </div>
+       <div class="detail_record mr-auto">
+        {% if 33 > 0 %}
+         <div class="col-span-12 mt-6 mb-2">
+          <div class="intro-y block sm:flex items-center h-6">
+           <div class="flex items-center sm:ml-auto mt-2 mb-2 sm:mt-0">
+            <a href="javascript:;" data-event-occurrence-id="{{ 123}}"
+               class="button w-22  inline-block mr-1 mb-2 bg-theme-1 view-waiting-list text-white">{{33 }}
+             Waiting</a>
+            <a href="javascript:;" data-toggle="modal"
+               data-event-occurrence-id="{{ 444}}"
+               data-target="#header-footer-modal-preview"
+               class="button w-22  inline-block mr-1 mb-2 bg-theme-3 add-new-class-booking text-white">Add
+             New</a>
+           </div>
+          </div>
+          <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
+           <table class="table table-report sm:mt-0">
+            <tbody>
+            {% for  key,classBooking in [1,2,3] %}
+             {% set status  = 1 %}
+             <tr class="intro-x">
+              <td class="w-40">
+               <div class="flex">
+                <div class="w-10 h-10 image-fit zoom-in -ml-3">
+                 <img alt="Midone Tailwind HTML Admin Template"
+                      class="tooltip rounded-full"
+                      src="/admin/dist/images/profile-4.jpg"
+                      title="Uploaded at 17 November 2021">
+                </div>
+                <div class="ml-3 mt-3 mr-auto">
+                 <div class="text-gray-900 text-xs whitespace-no-wrap">{{ 'abc' }} {{ 'james' }}</div>
+                </div>
+               </div>
+              </td>
+              <td class="text-center">
+               <div class="flex">
+                <div class="ml-auto mr-auto mt-1">
+                 <div class="text-xs ">123</div>
+                </div>
+               </div>
+              </td>
+              <td class="text-center text-xs ">321</td>
+              <td class="text-center text-xs ">321</td>
+
+              <td class="table-report__action w-56">
+               <div class="flex justify-center items-center pl-22">
+                <a class="flex items-center ml-4 mr-3 edit-class-booking"
+                   data-class-booking-id="{{ 22 }}"
+                   data-target="#update-status-modal"
+                   href="javascript:;">
+                 <i data-feather="edit" class="w-4 h-4 mr-1"></i> </a>
+                <a class="flex items-center text-theme-6 delete-item"
+                   data-item-type="ClassBooking"
+                   data-item-id="{{ 33 }}"
+                   href="javascript:;">
+                 <i data-feather="trash-2"
+                    class="w-4 h-4 mr-1"></i> </a>
+               </div>
+              </td>
+             </tr>
+            {% endfor %}
+            </tbody>
+           </table>
+          </div>
+         </div>
+        {% else %}
+         <div class="intro-y block sm:flex items-center h-6 mt-5 mb-4">
+          <h2 class="text-lg font-medium truncate mr-5">
+           No Members Enrolled!
+          </h2>
+          <div class="flex items-center sm:ml-auto mt-3 sm:mt-0">
+           <a href="javascript:;" data-toggle="modal"
+              data-event-occurrence-id="{{ event_occurrence.id }}"
+              data-target="#header-footer-modal-preview"
+              class="button w-22  inline-block mr-1 mb-2 bg-theme-3 add-new-class-booking text-white">Add
+            New</a>
+          </div>
+         </div>
+        {% endif %}
        </div>
       </div>
      {% endfor %}
