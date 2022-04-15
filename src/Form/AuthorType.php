@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Author;
+use App\Entity\Country;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -10,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class AuthorType extends AbstractType
 {
@@ -19,21 +20,37 @@ class AuthorType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'required' => true,
-                'attr' => ['class' => 'form-control'],
-                'constraints' => [
+                'attr' => [
+                    'placeholder' => 'Enter name',
+                    'class' => 'input payment-type authcode w-full border mt-2',
+                ],                'constraints' => [
                     new NotBlank(),
                 ],
             ])
             ->add('age', IntegerType::class, [
                 'label' => 'Age',
                 'required' => true,
+                'attr' => [
+                    'placeholder' => 'Enter age',
+                    'class' => 'input payment-type authcode w-full border mt-2',
+                ],
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ])
+            ->add('country', EntityType::class, [
+                'class' => Country::class,
+                'label' => 'Country',
+                'required' => true,
+                'placeholder' => 'Choose an option',
+                'attr' => ['class' => 'select2 mt-2', "data-placeholder"=>"Select Country" , "data-allow-clear"=>"true", "data-search-input-placeholder"=>"type to search"],
                 'constraints' => [
                     new NotBlank(),
                 ],
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-primary float-right',
+                    'class' => 'button mt-2 w-20 bg-theme-9 text-white ml-3 navigation',
                 ],
                 'label' => 'Save',
             ]);

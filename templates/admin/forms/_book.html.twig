@@ -1,0 +1,88 @@
+<div class="grid grid-cols-12 gap-6">
+    <div class="col-span-12 lg:col-span-12 xxl:col-span-12">
+        <!-- BEGIN: Form Start -->
+        <div class="intro-y box lg:mt-5">
+            <div class="flex items-center p-5 border-b border-gray-200 dark:border-dark-5">
+                <h2 class="font-medium text-base mr-auto">
+                         {{ header_label }}
+                </h2>
+            </div>
+            <div class="p-5">
+                {{ form_start(form) }}
+                <div class="col-span-12 lg:col-span-12 xxl:col-span-9">
+                    <div class="grid grid-cols-12 gap-5">
+                       
+                        <div class="col-span-12 xl:col-span-3">
+                            <div>
+                                {{ form_label(form.title) }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.title) }}
+                                </div>
+                                <div class="text-theme-6 mt-2"> {{ form_errors(form.title) }}</div>
+                            </div>
+                        </div>
+
+                          <div class="col-span-12 xl:col-span-3">
+                            <div>
+                                {{ form_label(form.topic) }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.topic) }}
+                                </div>
+                                <div class="text-theme-6 mt-2"> {{ form_errors(form.topic) }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-span-12 xl:col-span-3">
+                            <div>
+                                {{ form_label(form.author) }}
+                                <div class="mt-2">
+                                    {{ form_widget(form.author) }}
+                                </div>
+                                <div class="text-theme-6 mt-2"> {{ form_errors(form.author) }}</div>
+                            </div>
+                        </div>
+               
+
+                    <div class="col-span-12 xl:col-span-3">
+                                <div>
+                                    {{ form_label(form.price) }}
+                                    <div class="mt-2">
+                                        {{ form_widget(form.price) }}
+                                    </div>
+                                    <div class="text-theme-6 mt-2"> {{ form_errors(form.price) }}</div>
+                                </div>
+                        </div>
+               
+
+                <div class="col-span-12 xl:col-span-3">
+                                <div>
+                                    {{ form_label(form.publishedDate) }}
+                                    <div class="mt-2">
+                                        {{ form_widget(form.publishedDate) }}
+                                    </div>
+                                    <div class="text-theme-6 mt-2"> {{ form_errors(form.publishedDate) }}</div>
+                                </div>
+                        </div>
+               
+                    </div>
+                </div>
+                <div class="col-span-12 xl:col-span-12">
+                    <div class="intro-y mt-2">
+                        <div id="conflict-validation-feedback" class="col-span-12 lg:col-span-12 xxl:col-span-12">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 xl:col-span-12">
+                    <div class="intro-y block sm:flex items-center  h-8 mt-5">
+                        <div class="flex items-center sm:ml-auto mt-3 mb-3 sm:mt-0">
+                                <a href="{{ path('admin_author') }}" class="button mt-2 w-20 bg-theme-1 text-white ml-3 navigation"> {{button_label}}</a>
+                            {{ form_widget(form.submit) }}
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <!-- END: Form -->
+    </div>
+</div>

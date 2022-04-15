@@ -12,6 +12,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+
 
 
 class BookType extends AbstractType
@@ -22,7 +24,11 @@ class BookType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => 'Title',
                 'required' => true,
-                'attr' => ['class' => 'form-control'],
+                'attr' => [
+                    'placeholder' => 'Enter Title',
+                    'class' => 'input payment-type authcode w-full border mt-2',
+                ],
+
                 'constraints' => [
                     new NotBlank(),
                 ],
@@ -30,17 +36,21 @@ class BookType extends AbstractType
             ->add('price', IntegerType::class, [
                 'label' => 'Price',
                 'required' => true,
-                'attr' => ['class' => 'form-control'],
+                'attr' => [
+                    'placeholder' => 'Enter Price',
+                    'class' => 'input payment-type authcode w-full border mt-2',
+                ],
+
                 'constraints' => [
                     new NotBlank(),
                 ],
             ])
             ->add('author', EntityType::class, [
                 'class' => Author::class,
-                'label' => 'Book Author',
+                'label' => 'Author',
                 'required' => true,
                 'placeholder' => 'Choose an option',
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'select2 mt-2', "data-placeholder"=>"Select Author" , "data-allow-clear"=>"true", "data-search-input-placeholder"=>"type to search"],
                 'constraints' => [
                     new NotBlank(null,'Please select author'),
                 ],
@@ -48,14 +58,29 @@ class BookType extends AbstractType
             ->add('topic', TextType::class, [
                 'label' => 'Topic',
                 'required' => true,
-                'attr' => ['class' => 'form-control'],
+                'attr' => [
+                    'placeholder' => 'Enter Topic',
+                    'class' => 'input payment-type authcode w-full border mt-2',
+                ],
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ])
+            ->add('publishedDate', DateType::class, [
+                'label' => 'Date/Time',
+                'widget' => 'single_text',
+                'html5' => true,
+                'required' => false,
+                'attr' => [
+                    'class' => 'input w-full border mt-2',
+                ],
                 'constraints' => [
                     new NotBlank(),
                 ],
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-primary float-right',
+                    'class' => 'button mt-2 w-20 bg-theme-9 text-white ml-3 navigation'
                 ],
                 'label' => 'Save',
             ]);

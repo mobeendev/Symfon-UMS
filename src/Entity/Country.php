@@ -9,7 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=CountryRepository::class)
  */
 class Country
-{
+{   
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

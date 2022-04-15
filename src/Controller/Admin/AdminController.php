@@ -26,43 +26,31 @@ class AdminController extends BaseController
 
     
 
-    #[Route('/author/new', name: 'author_new')]
+    #[Route('/author/form', name: 'author_form')]
     public function newAuthor(Request $request): Response
-    {
+    {   
         $author = new Author();
         $form = $this->createForm(AuthorType::class, $author);
 
+        $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
+
         $form->handleRequest($request);
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($author);
             $this->em->flush();
             $this->addFlash('success', 'Author created with success.');
             return $this->redirectToRoute('admin_author');
         }
-        return $this->render('admin/new-author.html.twig', [
-            'form' => $form->createView()
+
+        return $this->render('admin/author-form.html.twig', [
+            'form' => $form->createView(),
+            'formInformation' => $formInformation,
         ]);
     }
 
 
-    #[Route('/author/edit/{id}', name: 'author_edit')]
-    public function editAuthor(Request $request, AuthorRepository $authorRepository, $id): Response
-    {
-        $author = $authorRepository->find($id);
-        $form = $this->createForm(AuthorType::class, $author);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($author);
-            $this->em->flush();
-            $this->addFlash('success', 'Author updated with success.');
-            return $this->redirectToRoute('admin_author');
-        }
-        return $this->render('admin/edit-author.html.twig', [
-            'form' => $form->createView()
-        ]);
-
-    }
 
     #[Route('/author', name: 'author')]
     public function author(AuthorRepository $authorRepository, BookRepository $bookRepository): Response
@@ -76,7 +64,6 @@ class AdminController extends BaseController
             }
             $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
         }
-//        dump($booksGroupByAuthor);
         return $this->render('admin/author.html.twig', [
             'books' => $booksGroupByAuthor,
         ]);
@@ -99,6 +86,30 @@ class AdminController extends BaseController
             'books' => $booksGroupByAuthor,
         ]);
     }
+
+
+    #[Route('/book/form', name: 'book_form')]
+    public function newBook(Request $request): Response
+    {   
+
+        $book = new Book();
+        $form = $this->createForm(BookType::class, $book);
+        $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($book);
+            $this->em->flush();
+            $this->addFlash('success', 'Book created with success.');
+            return $this->redirectToRoute('admin_book');
+        }
+        return $this->render('admin/book-form.html.twig', [
+            'form' => $form->createView(),
+            'formInformation' => $formInformation
+        ]);
+
+    }
+
     #[Route('/book', name: 'book')]
     public function book(BookRepository $bookRepository): Response
     {
@@ -115,44 +126,6 @@ class AdminController extends BaseController
         return $this->render('admin/book.html.twig', [
             'books' => $booksGroupByAuthor,
         ]);
-    }
-
-    #[Route('/book/new', name: 'book_new')]
-    public function newBook(Request $request): Response
-    {
-        $book = new Book();
-        $form = $this->createForm(BookType::class, $book);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($book);
-            $this->em->flush();
-            $this->addFlash('success', 'Book created with success.');
-            return $this->redirectToRoute('admin_book');
-        }
-        return $this->render('admin/new-book.html.twig', [
-            'form' => $form->createView()
-        ]);
-
-    }
-
-    #[Route('/book/edit/{id}', name: 'book_edit')]
-    public function editBook(Request $request, BookRepository $bookRepository, $id): Response
-    {
-        $book = $bookRepository->find($id);
-        $form = $this->createForm(BookType::class, $book);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($book);
-            $this->em->flush();
-            $this->addFlash('success', 'Book updated with success.');
-            return $this->redirectToRoute('admin_book');
-        }
-        return $this->render('admin/edit-book.html.twig', [
-            'form' => $form->createView()
-        ]);
-
     }
 
 }
