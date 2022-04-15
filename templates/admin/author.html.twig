@@ -1,88 +1,230 @@
 {% extends 'admin/_template/layout.html.twig' %}
-
 {% block content %}
-
- <!-- BEGIN: Search Filters  -->
- <div class="intro-y box pr-1">
-  <form class="" action="{{ path('admin_author') }}" id="tabulator-html-filter-form">
-
-   <div class="px-5 sm:px-5 mt-5 pt-5 border-t border-gray-200 dark:border-dark-5">
-    <div class="font-medium text-base">Filter Results</div>
-    <div class="grid grid-cols-12 gap-4 row-gap-5 mt-5">
-
-
-     <div class="intro-y col-span-12 sm:col-span-12  md:col-span-6 xxl:col-span-4">
-      <div class="mb-2">User</div>
-      <input type="text"  data-autocomplete-url="{{ path('admin_author') }}" class=" input w-full  border js-user-autocomplete" placeholder="Search by oxpin/firstname/lastname...">
-      <input type="hidden" id="user" name="user">
-     </div>
-
-     <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end pb-5">
-      <button type="submit" id="cancellation_submit" class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"  >Search</button>
-      <button type="submit" id="btn-reset" class="button w-24 justify-center block bg-gray-200 text-gray-600 dark:bg-dark-1 dark:text-gray-300" >Reset</button>
-     </div>
-    </div>
-   </div>
-  </form>
- </div>
- <!-- END: Search Filters -->
-
-
- <div class="col-span-12 mt-6 lg:col-span-4">
-  <div class="intro-y pr-1">
-   <div class="box p-2">
-    <div class="pos__tabs nav-tabs justify-center flex">
-     <a data-toggle="tab" data-target="#classes" href="{{ path('admin_author') }}"
-        class="flex-1 py-2 flat-md text-center navigation {{ 1 == 'noshow' ? 'active' }}">No Show</a>
-     <a data-toggle="tab" data-target="#pt" href="{{ path('admin_author') }}"
-        class="flex-1 py-2 flat-md text-center  navigation {{ 1 == 'admin' ? 'active' }}">Cancellation</a>
-    </div>
-   </div>
+ {% for message in app.flashes('success') %}
+  <div class="intro-y box p-5 mt-5 rounded-md flex items-center px-5 py-4 mb-2 bg-theme-9 text-white flash_message">
+   <i data-feather="alert-circle" class="w-6 h-6 mr-2"></i>{{ message }} <i data-feather="x"
+                                                                            class="w-4 dismiss_message h-4 ml-auto"></i>
   </div>
+ {% endfor %}
+ {% for message in app.flashes('error') %}
+  <div class="intro-y box p-5 mt-5 rounded-md flex items-center px-5 py-4 mb-2 bg-theme-6 text-white flash_message">
+   <i data-feather="alert-circle" class="w-6 h-6 mr-2"></i>{{ message }} <i data-feather="x"
+                                                                            class="w-4 dismiss_message h-4 ml-auto"></i>
+  </div>
+ {% endfor %}
+ <div class="col-span-12 mt-6 lg:col-span-4">
+
+  <div class="intro-y box pr-1 p-3 mt-1">
+        {{ include('/admin/partials/_filters_btn.html.twig') }}
+        <form  action="{{ path('admin_author') }}" id="tabulator-html-filter-form">
+            <div class="px-2 sm:px-2 mt-2 pt-2 toggle-filter">
+
+                    <div class="intro-y flex items-center h-10">
+                        <h2 class="text-lg font-medium truncate mr-5">
+                            Filter Results
+                        </h2>
+                        <button type="submit" id="btn-reset" class="button w-24 ml-auto flex bg-gray-200 text-gray-600 dark:bg-dark-1 dark:text-gray-300" >Add New</button>
+                    </div>
+
+                <div class="grid grid-cols-12 gap-4 row-gap-5 mt-5">
+                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-2 lg:col-span-2  xl:col-span-2 xxl:col-span-2">
+                        <div class="mb-2">Name</div>
+                        <input type="text"name="user-search" class=" input w-full border js-user-autocomplete"  data-autocomplete-url="{{ path('admin_author') }}"  placeholder="Search by name">
+                        <input type="hidden" id="user" name="user">
+                    </div>
+                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-2  lg:col-span-2 xl:col-span-2 xxl:col-span-2">
+                        <div class="mb-2">Age</div>
+                        <input type="text" name="amount"   value="{{ app.request.get('amount') }}" class="input w-full border"  placeholder="Enter Amount">
+                    </div>
+
+                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2">
+                        <div class="mb-2">Country</div>
+                        <select class="input w-full border flex-1 font-medium select2 autocomplete" id="type"  name="type" data-placeholder="Select Country" data-search-input-placeholder="Search Country" data-allow-clear="true">                        
+                            <option value="" selected="selected">Select Country</option>
+                            <option value="usa">USA</option>
+                            <option value="in">INDIA</option>
+                            <option value="pak">PAKISTAN</option>
+                            <option value="uk">UK</option>
+                        </select>
+                    </div>
+
+                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-2 xxl:col-span-2">
+                        <div class="mb-2">Book ISBN</div>
+                        <input type="text" name="receipt_no"  value="{{ app.request.get('receipt_no') }}"  class="input w-full border"  placeholder="Enter ISBN Number">
+                    </div>
+
+
+                   
+
+                    <div class="intro-y col-span-6 sm:col-span-2  md:col-span-3  lg:col-span-3 xl:col-span-2 xxl:col-span-2">
+                        <div class="mb-2">Published Start</div>
+                        <input type="datetime-local" value="{{app.request.query.get('published') ? app.request.query.get('payment_start') | date("Y-m-d\\TH:i") : '' }}" id="payment_start" name="payment_start"  class="input w-full border flex-1" >
+                    </div>
+
+                    <div class="intro-y col-span-6 sm:col-span-2  md:col-span-3  lg:col-span-3 xl:col-span-2 xxl:col-span-2">
+                        <div class="mb-2">Published End</div>
+                        <input type="datetime-local" value="{{app.request.query.get('published') ? app.request.query.get('payment_end') | date("Y-m-d\\TH:i") : '' }}" id="payment_end" name="payment_end"  class="input w-full border flex-1" >
+                    </div>
+                    <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end pb-5">
+                        <button type="submit" id="payment_btn_submit" class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3 "  >Search</button>
+                        <button type="submit" id="btn-reset" class="button w-24 justify-center block bg-gray-200 text-gray-600 dark:bg-dark-1 dark:text-gray-300" >Reset</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
   <div class="tab-content">
-
-
-
-    <div class="tab-content__pane active" id="pt">
-      {% for key, author in authors %}
-       <div class="intro-y mt-4">
-        <div class="box box grid grid-cols-6  py-6 gap-1 mt-5 mb-2 flex items-center toggle_details">
-
-         <div class="ml-1  ml-auto mr-auto mt-1">
-          <div class="font-medium">{{author.id }} </div>
+   <div class="tab-content__pane active" id="classes">
+    {% for author, book_records in books %}
+     <div class="mt-3 mb-2">
+      <h4 class="text-xl text-gray-700 dark:text-gray-600 font-medium leading-none mt-3">
+       {{ author|upper }}
+      </h4>
+     </div>
+     {% for  key,book in book_records %}
+      {% set color = 'text-theme-9' %}
+      <div class="intro-y mt-1">
+       <div class="box grid grid-cols-8  gap-1 mt-5 toggle_details zoom-in">
+        <div class="ml-1  ml-auto mr-auto pl-3 py-6 mt-2">
+         <div class="font-medium"> # {{ book.id }}
          </div>
-         <div class="items-center ml-auto mr-auto   ml-1 "> {{author.name }} </div>
-         <div class="items-center ml-auto mr-auto   ml-1 "> {{ author.age }} </div>
-         <div class="flex justify-center   items-center">
-          <div class="flex justify-center items-center pl-22">
-           <a class="flex items-center text-theme-6 delete-item" href="javascript:;"
-              data-item-type="Cancellation" data-item-id="{{ author.id }}"> <i
-                    data-feather="trash-2" class="w-4 h-4 mr-1"></i>
-           </a>
+        </div>
+        <div class="items-center ml-auto mr-auto  ml-1    py-6 mt-2  ">
+         - {{ book.title }}
+        </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> $ {{ book.price }} </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> {{ book.price }} </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> GGG </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> GGG </div>
+        <div class="items-center ml-auto mr-auto  ml-1   pl-2 py-6 mt-3   {{ color }}">
+         22
+        </div>
+        <div class="items-center  ml-auto mr-auto  pl-3 py-4 mt-3     ">
+         <div class="pos-dropdown dropdown ml-auto sm:ml-0">
+          <button class="dropdown-toggle button px-2 box text-gray-900 dark:text-gray-300">
+           <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-feather="more-horizontal"></i> </span>
+          </button>
+          <div class="pos-dropdown__dropdown-box dropdown-box">
+           <div class="dropdown-box__content box dark:bg-dark-1 p-2">
+            <a href="{{ path('admin_index') }}"
+               class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md navigation">
+             <i data-feather="edit" class="w-4 h-4 mr-2"></i> <span
+                     class="check-square">Edit</span> </a>
+            <a href="#"
+               data-has-related="true"
+               data-item-type="EventOccurrence"
+               data-item-id="{{ 12 }}"
+               class="flex items-center  delete-item text-theme-6 block p-2  text-theme-6 transition duration-300 ease-in-out bg-white dark:bg-dark-2 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+             <i data-feather="trash-2" class="w-4 h-4 mr-2"></i> <span
+                     class="truncate">Delete</span> </a>
+           </div>
           </div>
          </div>
         </div>
        </div>
-      {% endfor %}
+       <div class="detail_record mr-auto">
+        {% if 33 > 0 %}
+         <div class="col-span-12 mt-6 mb-2">
+          <div class="intro-y block sm:flex items-center h-6">
+           <div class="flex items-center sm:ml-auto mt-2 mb-2 sm:mt-0">
+            <a href="javascript:;" data-event-occurrence-id="{{ 123}}"
+               class="button w-22  inline-block mr-1 mb-2 bg-theme-1 view-waiting-list text-white">{{33 }}
+             Waiting</a>
+            <a href="javascript:;" data-toggle="modal"
+               data-event-occurrence-id="{{ 444}}"
+               data-target="#header-footer-modal-preview"
+               class="button w-22  inline-block mr-1 mb-2 bg-theme-3 add-new-class-booking text-white">Add
+             New</a>
+           </div>
+          </div>
+          <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
+           <table class="table table-report sm:mt-0">
+            <tbody>
+            {% for  key,classBooking in [1,2,3] %}
+             {% set status  = 1 %}
+             <tr class="intro-x">
+              <td class="w-40">
+               <div class="flex">
+                <div class="w-10 h-10 image-fit zoom-in -ml-3">
+                 <img alt="Midone Tailwind HTML Admin Template"
+                      class="tooltip rounded-full"
+                      src="/admin/dist/images/profile-4.jpg"
+                      title="Uploaded at 17 November 2021">
+                </div>
+                <div class="ml-3 mt-3 mr-auto">
+                 <div class="text-gray-900 text-xs whitespace-no-wrap">{{ 'abc' }} {{ 'james' }}</div>
+                </div>
+               </div>
+              </td>
+              <td class="text-center">
+               <div class="flex">
+                <div class="ml-auto mr-auto mt-1">
+                 <div class="text-xs ">123</div>
+                </div>
+               </div>
+              </td>
+              <td class="text-center text-xs ">321</td>
+              <td class="text-center text-xs ">321</td>
 
-{#     {{ include('/admin/partials/pagination.html.twig') }}#}
-    </div>
+              <td class="table-report__action w-56">
+               <div class="flex justify-center items-center pl-22">
+                <a class="flex items-center ml-4 mr-3 edit-class-booking"
+                   data-class-booking-id="{{ 22 }}"
+                   data-target="#update-status-modal"
+                   href="javascript:;">
+                 <i data-feather="edit" class="w-4 h-4 mr-1"></i> </a>
+                <a class="flex items-center text-theme-6 delete-item"
+                   data-item-type="ClassBooking"
+                   data-item-id="{{ 33 }}"
+                   href="javascript:;">
+                 <i data-feather="trash-2"
+                    class="w-4 h-4 mr-1"></i> </a>
+               </div>
+              </td>
+             </tr>
+            {% endfor %}
+            </tbody>
+           </table>
+          </div>
+         </div>
+        {% else %}
+         <div class="intro-y block sm:flex items-center h-6 mt-5 mb-4">
+          <h2 class="text-lg font-medium truncate mr-5">
+           No Members Enrolled!
+          </h2>
+          <div class="flex items-center sm:ml-auto mt-3 sm:mt-0">
+           <a href="javascript:;" data-toggle="modal"
+              data-event-occurrence-id="{{ event_occurrence.id }}"
+              data-target="#header-footer-modal-preview"
+              class="button w-22  inline-block mr-1 mb-2 bg-theme-3 add-new-class-booking text-white">Add
+            New</a>
+          </div>
+         </div>
+        {% endif %}
+       </div>
+      </div>
+     {% endfor %}
+    {% endfor %}
+    {#                {{ include('/admin/partials/pagination.html.twig') }}#}
+   </div>
   </div>
  </div>
 {% endblock %}
 {% block javascript %}
- <script type="text/javascript">
-  $(document).ready(function () {
-   $(".detail_record").hide();
+<script type="text/javascript">
+ $(document).ready(function () {
+ $(".detail_record").hide();
 
-   $(".toggle_details").click(function (e) {
-    if (e.target.tagName.toLowerCase() == 'button' || e.target.tagName.toLowerCase() == 'svg') {
-     $(".detail_record").hide();
-     return;
-    }
-    $(".toggle_details").not(this).siblings().hide();
-    $(this).siblings(".detail_record").toggle();
-   });
-  });
- </script>
+ $(".toggle_details").click(function (e) {
+ if (e.target.tagName.toLowerCase() == 'button' || e.target.tagName.toLowerCase() == 'svg') {
+ $(".detail_record").hide();
+ return;
+}
+ $(".toggle_details").not(this).siblings().hide();
+ $(this).siblings(".detail_record").toggle();
+});
+});
+</script>
 {% endblock %}

@@ -31,9 +31,9 @@ security:
             custom_authenticator: App\Security\DummyAuthenticator
             # switch_user: true
 
-    access_control:
-         - { path: ^/admin/book, roles: ROLE_USER }
-         - { path: ^/admin, roles: ROLE_ADMIN }
+    # access_control:
+    #      - { path: ^/admin/book, roles: ROLE_USER }
+    #      - { path: ^/admin, roles: ROLE_ADMIN }
 #         - { path: ^/profile, roles: ROLE_USER }
 
 

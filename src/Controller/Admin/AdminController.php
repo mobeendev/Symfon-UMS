@@ -24,17 +24,7 @@ class AdminController extends BaseController
         ]);
     }
 
-    #[Route('/author', name: 'author')]
-    public function author(AuthorRepository $authorRepository): Response
-    {
-        $authors = $authorRepository->findAll();
-//    dd('ddd');
-        dump($authors);
-        return $this->render('admin/author.html.twig', [
-            'authors' => $authors,
-        ]);
-    }
-
+    
 
     #[Route('/author/new', name: 'author_new')]
     public function newAuthor(Request $request): Response
@@ -73,6 +63,25 @@ class AdminController extends BaseController
         ]);
 
     }
+
+    #[Route('/author', name: 'author')]
+    public function author(AuthorRepository $authorRepository, BookRepository $bookRepository): Response
+    {
+        $books = $bookRepository->findAll();
+        $booksGroupByAuthor = [];
+
+        foreach ($books as $book){
+            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
+                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
+            }
+            $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
+        }
+//        dump($booksGroupByAuthor);
+        return $this->render('admin/author.html.twig', [
+            'books' => $booksGroupByAuthor,
+        ]);
+    }
+
 
     #[Route('/book/borrowed', name: 'book_borrowed')]
     public function bookBorrowed(BookRepository $bookRepository): Response
