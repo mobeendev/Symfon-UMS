@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BookRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,6 +44,16 @@ class Book
      * @ORM\Column(type="date")
      */
     private $publishedDate;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BooksHasTags::class, mappedBy="Book")
+     */
+    public $tag;
+
+    public function __construct()
+    {
+        $this->tag = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +116,36 @@ class Book
     public function setPublishedDate(\DateTimeInterface $published_date): self
     {
         $this->publishedDate = $published_date;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BooksHasTags>
+     */
+    public function getTag(): Collection
+    {
+        return $this->tag;
+    }
+
+    public function addTag(BooksHasTags $tag): self
+    {
+        // if (!$this->tag->contains($tag)) {
+            $this->tag[] = $tag;
+            $tag->setBook($this);
+        // }
+
+        return $this;
+    }
+
+    public function removeTag(BooksHasTags $tag): self
+    {
+        if ($this->tag->removeElement($tag)) {
+            // set the owning side to null (unless already changed)
+            if ($tag->getBook() === $this) {
+                $tag->setBook(null);
+            }
+        }
 
         return $this;
     }

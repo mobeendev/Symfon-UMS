@@ -1,8 +1,28 @@
 {% extends 'admin/_template/layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.css">
+{% endblock %}
+
 {% block content %}
     {{ include('admin/forms/_book.html.twig', {
         form: form,
         header_label: formInformation.header_label,
         button_label: formInformation.button_label,
     }, with_context = false) }}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+
+    <script src="https://cdn.jsdelivr.net/npm/spectrum-colorpicker2/dist/spectrum.min.js"></script>
+    <script>
+        $('#book_color').spectrum({
+            type: "component",
+            showPaletteOnly: true,
+            togglePaletteOnly: true,
+            hideAfterPaletteSelect: true,
+            color: ""
+        })
+    </script>
 {% endblock %}

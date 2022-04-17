@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Author;
 use App\Entity\Book;
+use App\Entity\Tags;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -55,6 +56,16 @@ class BookType extends AbstractType
                     new NotBlank(null,'Please select author'),
                 ],
             ])
+            ->add('tag', EntityType::class, [
+                'class' => Tags::class,
+                'required' => true,
+                'multiple' => true,
+                'placeholder' => 'Choose an option',
+                'attr' => ['class' => 'select2 mt-2', "data-placeholder"=>"Select Author" , "data-allow-clear"=>"true", "data-search-input-placeholder"=>"type to search"],
+                'constraints' => [
+                    new NotBlank(null,'Please select author'),
+                ],
+            ])
             ->add('topic', TextType::class, [
                 'label' => 'Topic',
                 'required' => true,
@@ -73,6 +84,16 @@ class BookType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'input w-full border mt-2',
+                ],
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ])
+            ->add('color', TextType::class, [
+                'required' => true,
+                'mapped' => false,
+                'attr' => [
+                    'class' => 'input payment-type w-full border mt-2',
                 ],
                 'constraints' => [
                     new NotBlank(),
