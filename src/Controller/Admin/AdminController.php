@@ -31,14 +31,20 @@ class AdminController extends BaseController
     
 
     #[Route('/author/form', name: 'author_form')]
-    public function newAuthor(Request $request): Response
+    public function newAuthor(AuthorRepository $authorRepository, Request $request): Response
     {   
         $author = new Author();
-        $form = $this->createForm(AuthorType::class, $author);
 
         $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
 
+        if (isset($id) && !empty($id)){
+            $author = $authorRepository->find($id);
+            $formInformation = [ 'header_label' => 'Update Class Pack', 'button_label' => 'Back' ];
+        }
+
+        $form = $this->createForm(ClassPackType::class, $classPack);
         $form->handleRequest($request);
+
         
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($author);
