@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 
 class BookType extends AbstractType
@@ -77,6 +77,10 @@ class BookType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                 ],
+            ])
+            ->add('bookTags', CollectionType::class, [
+                'entry_type' => BookTagType::class,
+                'allow_add' => true,
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
