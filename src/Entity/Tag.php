@@ -66,6 +66,8 @@ class Tag
 
     public function addRelatedBook(BookTag $relatedBook): self
     {
+
+        dd($relatedBook);
         if (!$this->relatedBooks->contains($relatedBook)) {
             $this->relatedBooks[] = $relatedBook;
             $relatedBook->setTag($this);

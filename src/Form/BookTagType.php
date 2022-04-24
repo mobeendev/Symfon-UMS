@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 
 class BookTagType extends AbstractType
@@ -41,9 +43,22 @@ class BookTagType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                 ],
-            ]);
+            ])
+            ->addEventListener(
+                FormEvents::POST_SET_DATA,
+                array($this, 'onPostSetData')
+            )
+        ;
 
         ;
+    }
+
+    public function onPostSetData(FormEvent $event)
+    {
+        if ($event->getData() && $event->getData()->getId()) {
+            $form = $event->getForm();
+            unset($form['tag']);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

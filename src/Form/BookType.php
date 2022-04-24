@@ -14,6 +14,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 
 
 class BookType extends AbstractType
@@ -81,6 +84,8 @@ class BookType extends AbstractType
             ->add('bookTags', CollectionType::class, [
                 'entry_type' => BookTagType::class,
                 'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
@@ -89,10 +94,17 @@ class BookType extends AbstractType
                 'label' => 'Save',
             ]);
 
+            $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
 
         ;
     }
 
+    public function onPreSubmit(FormEvent $event)
+    {
+        $data = $event->getData();
+        $data['bookTags'] = array_values($data['bookTags']);
+        $event->setData($data);
+    }
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

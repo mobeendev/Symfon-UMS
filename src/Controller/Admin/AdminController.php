@@ -26,6 +26,53 @@ class AdminController extends BaseController
         ]);
     }
 
+    #[Route('/book/form/{id}', name: 'book_form')]
+    public function newBook(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
+    {   
+
+        $book = new Book();
+        $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
+
+
+        if (isset($id) && !empty($id)){
+            $book = $bookRepository->find($id);
+            $formInformation = [ 'header_label' => 'Update Class Pack', 'button_label' => 'Back' ];
+        }
+
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+                dump( $form->getData(), $book);  
+
+
+
+
+                $this->em->persist($book);
+
+            foreach($book->getBookTags() as $bookTag){
+
+                // dd($bookTag);
+                $book->addBookTag($bookTag);
+
+                $this->em->persist($book);
+            }
+
+            $this->em->flush();
+            $this->addFlash('success', 'Book created with success.');
+            return $this->redirectToRoute('admin_book');
+        }
+        // dd($form);
+
+        // dd($form->createView());
+        return $this->render('admin/book-form.html.twig', [
+            'form' => $form->createView(),
+            'formInformation' => $formInformation
+        ]);
+
+    }
+
     
 
     #[Route('/author/form', name: 'author_form')]
@@ -90,49 +137,7 @@ class AdminController extends BaseController
     }
 
 
-    #[Route('/book/form/{id}', name: 'book_form')]
-    public function newBook(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
-    {   
-
-        $book = new Book();
-        $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
-
-
-        if (isset($id) && !empty($id)){
-            $book = $bookRepository->find($id);
-            $formInformation = [ 'header_label' => 'Update Class Pack', 'button_label' => 'Back' ];
-        }
-
-        $form = $this->createForm(BookType::class, $book);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($book);
-
-
-            // $tag = $tagRepository->find(1);
-            // $bookTag = new BookTag();
-            // $bookTag->setBook($book);
-            // $bookTag->setTag($tag);
-            // $bookTag->setCreatedAt(new \DateTimeImmutable());
-            // $this->em->persist($bookTag);
-
-
-
-            $this->em->flush();
-            $this->addFlash('success', 'Book created with success.');
-            return $this->redirectToRoute('admin_book');
-        }
-        // dd($form);
-
-        // dd($form->createView());
-        return $this->render('admin/book-form.html.twig', [
-            'form' => $form->createView(),
-            'formInformation' => $formInformation
-        ]);
-
-    }
-
+    
     #[Route('/book', name: 'book')]
     public function book(BookRepository $bookRepository): Response
     {

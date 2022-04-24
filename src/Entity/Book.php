@@ -46,7 +46,11 @@ class Book
     private $publishedDate;
 
     /**
-     * @ORM\OneToMany(targetEntity=BookTag::class, mappedBy="book")
+     * @ORM\OneToMany(targetEntity=BookTag::class, mappedBy="book",
+     * fetch="EXTRA_LAZY",
+     *  orphanRemoval=true,
+     *  cascade={"persist"}
+     * )
      */
     private $bookTags;
 
@@ -133,17 +137,20 @@ class Book
         return $this->bookTags;
     }
 
-    public function addBookTag(BookTag $bookTag): self
-    {
-        if (!$this->bookTags->contains($bookTag)) {
-            $this->bookTags[] = $bookTag;
-            $bookTag->setBook($this);
+    public function addBookTag(BookTag $bookTag)
+    {   
+        if ($this->bookTags->contains($bookTag)) {
+            return ;
         }
+
+        $this->bookTags[] = $bookTag;
+        // needed to update the owning side of the relationship!
+        $bookTag->setBook($this);
 
         return $this;
     }
 
-    public function removeBookTag(BookTag $bookTag): self
+    public function removeBookTag(BookTag $bookTag)
     {
         if ($this->bookTags->removeElement($bookTag)) {
             // set the owning side to null (unless already changed)

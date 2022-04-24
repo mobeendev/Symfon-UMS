@@ -28,7 +28,7 @@ class BookTag
     private $tag;
 
     /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     private $createdAt;
 
@@ -61,12 +61,12 @@ class BookTag
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt()
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeImmutable $createdAt): self
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = $createdAt;
 
