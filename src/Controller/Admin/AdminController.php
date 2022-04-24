@@ -13,15 +13,27 @@ use App\Repository\BookRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\EventListener\BookCreateEvent;
+use App\EventListener\BookEventSubscriber;
 
 
 // https://localcoder.org/symfony-manytomany-table-extra-columns
 
-#[Route('/admin', name: 'admin_')]
+/**
+ * @Route("/admin", name="admin_")
+ */
 class AdminController extends BaseController
-{
-    #[Route('/', name: 'index')]
-    public function index(): Response
+{   
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
+     * @Route("/", name="index")
+     */    public function index(): Response
     {
         return $this->render('admin/index.html.twig', [
             'controller_name' => 'AdminController',
@@ -30,7 +42,9 @@ class AdminController extends BaseController
 
     
 
-    #[Route('/author/form', name: 'author_form')]
+    /**
+     * @Route("/author/form", name="author_form")
+     */
     public function newAuthor(AuthorRepository $authorRepository, Request $request): Response
     {   
         $author = new Author();
@@ -42,7 +56,7 @@ class AdminController extends BaseController
             $formInformation = [ 'header_label' => 'Update Class Pack', 'button_label' => 'Back' ];
         }
 
-        $form = $this->createForm(ClassPackType::class, $classPack);
+        $form = $this->createForm(AuthorType::class, $author);
         $form->handleRequest($request);
 
         
@@ -61,8 +75,9 @@ class AdminController extends BaseController
 
 
 
-
-    #[Route('/author', name: 'author')]
+    /**
+     * @Route("/author", name="author")
+     */
     public function author(AuthorRepository $authorRepository, BookRepository $bookRepository): Response
     {
         $authors = $authorRepository->findAll();
@@ -72,26 +87,13 @@ class AdminController extends BaseController
     }
 
 
-    #[Route('/book/borrowed', name: 'book_borrowed')]
-    public function bookBorrowed(BookRepository $bookRepository): Response
-    {
-        $books = $bookRepository->findAll();
-        $booksGroupByAuthor = [];
-
-        foreach ($books as $book){
-            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
-                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
-            }
-            $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
-        }
-        return $this->render('admin/book-borrowed.html.twig', [
-            'books' => $booksGroupByAuthor,
-        ]);
-    }
+   
 
 
-    #[Route('/book/form', name: 'book_form')]
-    public function newBook(Request $request): Response
+   /**
+     * @Route("/book/form", name="book_form")
+     */
+     public function newBook(Request $request): Response
     {   
 
         $book = new Book();
@@ -108,21 +110,19 @@ class AdminController extends BaseController
  
             $tagsArr = $book->getTag() ; 
 
-            unset($book->tag);
-            foreach($tagsArr as $tag){
+                    $event = new BookCreateEvent();
 
-                $bht = new BooksHasTags();
-                $bht->setTag($tag);
-                $color   = $form->get("color")->getData();
-                $bht->setColor($color);
 
-                $book->addTag($bht) ;
+            $this->eventDispatcher->addSubscriber(new BookEventSubscriber());
 
-                $this->em->persist($bht);
-            }   
+            $this->eventDispatcher->dispatch($event, BookCreateEvent::NAME);
+
+
 
             $this->em->persist($book);
             $this->em->flush();
+
+
             $this->addFlash('success', 'Book created with success.');
             return $this->redirectToRoute('admin_book');
         }
@@ -133,7 +133,9 @@ class AdminController extends BaseController
 
     }
 
-    #[Route('/book', name: 'book')]
+    /**
+     * @Route("/book", name="book")
+     */
     public function book(BookRepository $bookRepository): Response
     {
         $books = $bookRepository->findAll();
