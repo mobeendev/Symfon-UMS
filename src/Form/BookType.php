@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Author;
 use App\Entity\Book;
-use App\Entity\Tags;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -14,7 +13,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 
 
 class BookType extends AbstractType
@@ -46,26 +48,6 @@ class BookType extends AbstractType
                     new NotBlank(),
                 ],
             ])
-            ->add('author', EntityType::class, [
-                'class' => Author::class,
-                'label' => 'Author',
-                'required' => true,
-                'placeholder' => 'Choose an option',
-                'attr' => ['class' => 'select2 mt-2', "data-placeholder"=>"Select Author" , "data-allow-clear"=>"true", "data-search-input-placeholder"=>"type to search"],
-                'constraints' => [
-                    new NotBlank(null,'Please select author'),
-                ],
-            ])
-            ->add('tag', EntityType::class, [
-                'class' => Tags::class,
-                'required' => true,
-                'multiple' => true,
-                'placeholder' => 'Choose an option',
-                'attr' => ['class' => 'select2 mt-2', "data-placeholder"=>"Select Author" , "data-allow-clear"=>"true", "data-search-input-placeholder"=>"type to search"],
-                'constraints' => [
-                    new NotBlank(null,'Please select author'),
-                ],
-            ])
             ->add('topic', TextType::class, [
                 'label' => 'Topic',
                 'required' => true,
@@ -89,15 +71,11 @@ class BookType extends AbstractType
                     new NotBlank(),
                 ],
             ])
-            ->add('color', TextType::class, [
-                'required' => true,
-                'mapped' => false,
-                'attr' => [
-                    'class' => 'input payment-type w-full border mt-2',
-                ],
-                'constraints' => [
-                    new NotBlank(),
-                ],
+            ->add('bookTags', CollectionType::class, [
+                'entry_type' => BookTagType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
@@ -106,10 +84,17 @@ class BookType extends AbstractType
                 'label' => 'Save',
             ]);
 
+            $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
 
         ;
     }
 
+    public function onPreSubmit(FormEvent $event)
+    {
+        $data = $event->getData();
+        $data['bookTags'] = array_values($data['bookTags']);
+        $event->setData($data);
+    }
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

@@ -5,17 +5,15 @@ namespace App\Controller\Admin;
 use App\Controller\BaseController;
 use App\Entity\Author;
 use App\Entity\Book;
-use App\Entity\BooksHasTags;
+use App\Entity\BookTag;
 use App\Form\AuthorType;
 use App\Form\BookType;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
+use App\Repository\TagRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-
-// https://localcoder.org/symfony-manytomany-table-extra-columns
 
 #[Route('/admin', name: 'admin_')]
 class AdminController extends BaseController
@@ -28,25 +26,71 @@ class AdminController extends BaseController
         ]);
     }
 
-    
-
-    #[Route('/author/form', name: 'author_form')]
-    public function newAuthor(AuthorRepository $authorRepository, Request $request): Response
+    #[Route('/book/form/{id}', name: 'book_form')]
+    public function newBook(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
     {   
-        $author = new Author();
 
+        $book = new Book();
         $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
 
+
         if (isset($id) && !empty($id)){
-            $author = $authorRepository->find($id);
+            $book = $bookRepository->find($id);
             $formInformation = [ 'header_label' => 'Update Class Pack', 'button_label' => 'Back' ];
         }
 
-        $form = $this->createForm(ClassPackType::class, $classPack);
+        $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+
+                dump( $form->getData(), $book);  
+
+                $this->em->persist($book);
+
+            foreach($book->getBookTags() as $bookTag){
+
+                $book->addBookTag($bookTag);
+                $this->em->persist($book);
+            }
+
+            $this->em->flush();
+            $this->addFlash('success', 'Book created with success.');
+            return $this->redirectToRoute('admin_book');
+        }
+        // dd($form);
+
+        // dd($form->createView());
+        return $this->render('admin/book-form.html.twig', [
+            'form' => $form->createView(),
+            'formInformation' => $formInformation
+        ]);
+
+    }
+
+    
+
+    #[Route('/author/form', name: 'author_form')]
+    public function newAuthor(Request $request, AuthorRepository $authorRepository): Response
+    {
+        $author = new Author();
+
+        $form = $this->createForm(AuthorType::class, $author);
+
+        $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
+
+        $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+
+//            dd($author);
+//            $articleToUpdate = $authorRepository->find($articleActualise['id']);
+//            if ($articleToUpdate === null) {
+//                // Article does not exist so we need to create a new object
+//            }
+
+
+
             $this->em->persist($author);
             $this->em->flush();
             $this->addFlash('success', 'Author created with success.');
@@ -65,9 +109,17 @@ class AdminController extends BaseController
     #[Route('/author', name: 'author')]
     public function author(AuthorRepository $authorRepository, BookRepository $bookRepository): Response
     {
-        $authors = $authorRepository->findAll();
+        $books = $bookRepository->findAll();
+        $booksGroupByAuthor = [];
+
+//        foreach ($books as $book){
+//            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
+//                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
+//            }
+//            $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
+//        }
         return $this->render('admin/author.html.twig', [
-            'authors' => $authors,
+            'books' => $books,
         ]);
     }
 
@@ -79,60 +131,16 @@ class AdminController extends BaseController
         $booksGroupByAuthor = [];
 
         foreach ($books as $book){
-            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
-                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
-            }
+
             $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
         }
         return $this->render('admin/book-borrowed.html.twig', [
-            'books' => $booksGroupByAuthor,
+            'books' => $books,
         ]);
     }
 
 
-    #[Route('/book/form', name: 'book_form')]
-    public function newBook(Request $request): Response
-    {   
-
-        $book = new Book();
-        $form = $this->createForm(BookType::class, $book);
-        $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
-
-        $form->handleRequest($request);
-
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-
-            $bookTags = [];
- 
-            $tagsArr = $book->getTag() ; 
-
-            unset($book->tag);
-            foreach($tagsArr as $tag){
-
-                $bht = new BooksHasTags();
-                $bht->setTag($tag);
-                $color   = $form->get("color")->getData();
-                $bht->setColor($color);
-
-                $book->addTag($bht) ;
-
-                $this->em->persist($bht);
-            }   
-
-            $this->em->persist($book);
-            $this->em->flush();
-            $this->addFlash('success', 'Book created with success.');
-            return $this->redirectToRoute('admin_book');
-        }
-        return $this->render('admin/book-form.html.twig', [
-            'form' => $form->createView(),
-            'formInformation' => $formInformation
-        ]);
-
-    }
-
+    
     #[Route('/book', name: 'book')]
     public function book(BookRepository $bookRepository): Response
     {
@@ -140,14 +148,9 @@ class AdminController extends BaseController
         $booksGroupByAuthor = [];
 
         foreach ($books as $book){
-            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
-                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
-            }
-            $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
         }
-//        dump($booksGroupByAuthor);
         return $this->render('admin/book.html.twig', [
-            'books' => $booksGroupByAuthor,
+            'books' => $books,
         ]);
     }
 

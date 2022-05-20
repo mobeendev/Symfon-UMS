@@ -30,12 +30,6 @@ class Book
     private $topic;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Author::class, inversedBy="books")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $author;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $price;
@@ -46,13 +40,22 @@ class Book
     private $publishedDate;
 
     /**
-     * @ORM\OneToMany(targetEntity=BooksHasTags::class, mappedBy="Book")
+     * @ORM\OneToMany(targetEntity=BookTag::class, mappedBy="book",
+     * fetch="EXTRA_LAZY",
+     *  orphanRemoval=true,
+     *  cascade={"persist"}
+     * )
      */
-    public $tag;
+    private $bookTags;
+
+    public function __toString()
+    {
+        return $this->title;
+    }
 
     public function __construct()
     {
-        $this->tag = new ArrayCollection();
+        $this->bookTags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,18 +87,6 @@ class Book
         return $this;
     }
 
-    public function getAuthor(): ?Author
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?Author $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
     public function getPrice(): ?int
     {
         return $this->price;
@@ -121,29 +112,32 @@ class Book
     }
 
     /**
-     * @return Collection<int, BooksHasTags>
+     * @return Collection<int, BookTag>
      */
-    public function getTag(): Collection
+    public function getBookTags(): Collection
     {
-        return $this->tag;
+        return $this->bookTags;
     }
 
-    public function addTag(BooksHasTags $tag): self
-    {
-        // if (!$this->tag->contains($tag)) {
-            $this->tag[] = $tag;
-            $tag->setBook($this);
-        // }
+    public function addBookTag(BookTag $bookTag)
+    {   
+        if ($this->bookTags->contains($bookTag)) {
+            return ;
+        }
+
+        $this->bookTags[] = $bookTag;
+        // needed to update the owning side of the relationship!
+        $bookTag->setBook($this);
 
         return $this;
     }
 
-    public function removeTag(BooksHasTags $tag): self
+    public function removeBookTag(BookTag $bookTag)
     {
-        if ($this->tag->removeElement($tag)) {
+        if ($this->bookTags->removeElement($bookTag)) {
             // set the owning side to null (unless already changed)
-            if ($tag->getBook() === $this) {
-                $tag->setBook(null);
+            if ($bookTag->getBook() === $this) {
+                $bookTag->setBook(null);
             }
         }
 
