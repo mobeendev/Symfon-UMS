@@ -30,12 +30,6 @@ class Book
     private $topic;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Author::class, inversedBy="books")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $author;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $price;
@@ -89,18 +83,6 @@ class Book
     public function setTopic(string $topic): self
     {
         $this->topic = $topic;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?Author
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(?Author $author): self
-    {
-        $this->author = $author;
 
         return $this;
     }

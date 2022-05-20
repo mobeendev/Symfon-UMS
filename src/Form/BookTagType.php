@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Tag;
 use App\Entity\BookTag;
@@ -30,6 +31,17 @@ class BookTagType extends AbstractType
                 'required' => true,
                 'placeholder' => 'Choose an option',
                 'attr' => ['class' => 'select2 mt-2', "data-placeholder"=>"Select Tag" , "data-allow-clear"=>"true", "data-search-input-placeholder"=>"type to search"],
+                'constraints' => [
+                    new NotBlank(),
+                ],
+            ])
+
+            ->add('author', EntityType::class, [
+                'class' => Author::class,
+                'label' => 'Author',
+                'required' => true,
+                'placeholder' => 'Choose an option',
+                'attr' => ['class' => 'select2 mt-2', "data-placeholder"=>"Select Author" , "data-allow-clear"=>"true", "data-search-input-placeholder"=>"type to search"],
                 'constraints' => [
                     new NotBlank(),
                 ],

@@ -48,16 +48,6 @@ class BookType extends AbstractType
                     new NotBlank(),
                 ],
             ])
-            ->add('author', EntityType::class, [
-                'class' => Author::class,
-                'label' => 'Author',
-                'required' => true,
-                'placeholder' => 'Choose an option',
-                'attr' => ['class' => 'select2 mt-2', "data-placeholder"=>"Select Author" , "data-allow-clear"=>"true", "data-search-input-placeholder"=>"type to search"],
-                'constraints' => [
-                    new NotBlank(null,'Please select author'),
-                ],
-            ])
             ->add('topic', TextType::class, [
                 'label' => 'Topic',
                 'required' => true,

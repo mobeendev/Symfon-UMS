@@ -2,22 +2,45 @@
 
 {% macro printGenusScientistRow(genusScientistForm) %}
 
-    <div class="col-span-12 xl:col-span-3 js-genus-scientist-item">
+   <div class="col-span-12 xl:col-span-3 js-genus-scientist-item">
         <a href="#" class="js-remove-scientist pull-right">
             <span class="fa fa-close"></span>
         </a>
         {{ form_errors(genusScientistForm) }}
-         <div class="col-span-6 xl:col-span-6 js-genus-scientist-item">
         {% if genusScientistForm.tag is defined %}
-            {{ form_row(genusScientistForm.tag) }}
+          
+                {{ form_label(genusScientistForm.tag) }}
+                <div class="mt-2">
+                    {{ form_widget(genusScientistForm.tag) }}
+                </div>
+                <div class="text-theme-6 mt-2"> {{ form_errors(genusScientistForm.tag) }}</div>
+
+
         {% else %}
             <strong>{{ genusScientistForm.vars.data.tag.name }}</strong>
         {% endif %}
          </div>
-        
-         <div class="col-span-6 xl:col-span-6 js-genus-scientist-item">
-        {{ form_row(genusScientistForm.createdAt) }}
-         </div>
+         <div class="col-span-12 xl:col-span-3">
+            <div>
+                {{ form_label(genusScientistForm.createdAt) }}
+                <div class="mt-2">
+                    {{ form_widget(genusScientistForm.createdAt) }}
+                </div>
+                <div class="text-theme-6 mt-2"> {{ form_errors(genusScientistForm.createdAt) }}</div>
+            </div>
+        </div>
+
+    <div class="col-span-12 xl:col-span-3">
+        <div>
+            {{ form_label(genusScientistForm.author) }}
+            <div class="mt-2">
+                {{ form_widget(genusScientistForm.author) }}
+            </div>
+            <div class="text-theme-6 mt-2"> {{ form_errors(genusScientistForm.author) }}</div>
+        </div>
+    </div>
+
+     
     </div>
 {% endmacro %}
 
@@ -55,17 +78,6 @@
                                 <div class="text-theme-6 mt-2"> {{ form_errors(form.topic) }}</div>
                             </div>
                         </div>
-
-                        <div class="col-span-12 xl:col-span-3">
-                            <div>
-                                {{ form_label(form.author) }}
-                                <div class="mt-2">
-                                    {{ form_widget(form.author) }}
-                                </div>
-                                <div class="text-theme-6 mt-2"> {{ form_errors(form.author) }}</div>
-                            </div>
-                        </div>
-               
 
                     <div class="col-span-12 xl:col-span-3">
                                 <div>

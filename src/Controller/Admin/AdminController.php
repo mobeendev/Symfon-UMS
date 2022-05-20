@@ -46,16 +46,11 @@ class AdminController extends BaseController
 
                 dump( $form->getData(), $book);  
 
-
-
-
                 $this->em->persist($book);
 
             foreach($book->getBookTags() as $bookTag){
 
-                // dd($bookTag);
                 $book->addBookTag($bookTag);
-
                 $this->em->persist($book);
             }
 
@@ -76,9 +71,10 @@ class AdminController extends BaseController
     
 
     #[Route('/author/form', name: 'author_form')]
-    public function newAuthor(Request $request): Response
-    {   
+    public function newAuthor(Request $request, AuthorRepository $authorRepository): Response
+    {
         $author = new Author();
+
         $form = $this->createForm(AuthorType::class, $author);
 
         $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
@@ -86,6 +82,15 @@ class AdminController extends BaseController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+
+//            dd($author);
+//            $articleToUpdate = $authorRepository->find($articleActualise['id']);
+//            if ($articleToUpdate === null) {
+//                // Article does not exist so we need to create a new object
+//            }
+
+
+
             $this->em->persist($author);
             $this->em->flush();
             $this->addFlash('success', 'Author created with success.');
@@ -107,14 +112,14 @@ class AdminController extends BaseController
         $books = $bookRepository->findAll();
         $booksGroupByAuthor = [];
 
-        foreach ($books as $book){
-            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
-                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
-            }
-            $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
-        }
+//        foreach ($books as $book){
+//            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
+//                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
+//            }
+//            $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
+//        }
         return $this->render('admin/author.html.twig', [
-            'books' => $booksGroupByAuthor,
+            'books' => $books,
         ]);
     }
 
@@ -126,13 +131,11 @@ class AdminController extends BaseController
         $booksGroupByAuthor = [];
 
         foreach ($books as $book){
-            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
-                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
-            }
+
             $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
         }
         return $this->render('admin/book-borrowed.html.twig', [
-            'books' => $booksGroupByAuthor,
+            'books' => $books,
         ]);
     }
 
@@ -145,14 +148,9 @@ class AdminController extends BaseController
         $booksGroupByAuthor = [];
 
         foreach ($books as $book){
-            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
-                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
-            }
-            $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
         }
-//        dump($booksGroupByAuthor);
         return $this->render('admin/book.html.twig', [
-            'books' => $booksGroupByAuthor,
+            'books' => $books,
         ]);
     }
 

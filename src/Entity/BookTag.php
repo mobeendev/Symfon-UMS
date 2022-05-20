@@ -28,6 +28,11 @@ class BookTag
     private $tag;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Author::class, inversedBy="relatedAuthors")
+     */
+    private $author;
+
+    /**
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     private $createdAt;
@@ -57,6 +62,18 @@ class BookTag
     public function setTag(?Tag $tag): self
     {
         $this->tag = $tag;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?Author
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?Author $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
