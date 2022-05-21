@@ -67,10 +67,10 @@ class BookTagType extends AbstractType
 
     public function onPostSetData(FormEvent $event)
     {
-        if ($event->getData() && $event->getData()->getId()) {
-            $form = $event->getForm();
-            unset($form['tag']);
-        }
+//        if ($event->getData() && $event->getData()->getId()) {
+//            $form = $event->getForm();
+//            unset($form['tag']);
+//        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

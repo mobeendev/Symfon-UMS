@@ -44,8 +44,6 @@ class AdminController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-                dump( $form->getData(), $book);  
-
                 $this->em->persist($book);
 
             foreach($book->getBookTags() as $bookTag){
@@ -68,7 +66,46 @@ class AdminController extends BaseController
 
     }
 
-    
+    #[Route('/book/form/edit/{id}', name: 'book_form_edit')]
+    public function editBook(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
+    {
+        $book = null;
+        if (isset($id) && !empty($id)){
+            $book = $bookRepository->find($id);
+            $formInformation = [ 'header_label' => 'Update Class Pack', 'button_label' => 'Back' ];
+        }
+
+
+//        dd($book);
+
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->em->persist($book);
+
+            foreach($book->getBookTags() as $bookTag){
+
+                $book->addBookTag($bookTag);
+                $this->em->persist($book);
+            }
+
+            $this->em->flush();
+            $this->addFlash('success', 'Book created with success.');
+            return $this->redirectToRoute('admin_book');
+        }
+        // dd($form);
+
+        // dd($form->createView());
+        return $this->render('admin/book-form.html.twig', [
+            'form' => $form->createView(),
+            'formInformation' => $formInformation
+        ]);
+
+    }
+
+
 
     #[Route('/author/form', name: 'author_form')]
     public function newAuthor(Request $request, AuthorRepository $authorRepository): Response
@@ -109,17 +146,47 @@ class AdminController extends BaseController
     #[Route('/author', name: 'author')]
     public function author(AuthorRepository $authorRepository, BookRepository $bookRepository): Response
     {
-        $books = $bookRepository->findAll();
-        $booksGroupByAuthor = [];
+        $authors = $authorRepository->getAuthor();
+        $authorWithBooks = [];
+//        dd($authors); ./
 
-//        foreach ($books as $book){
-//            if (!isset($booksGroupByAuthor[$book->getAuthor()->getName()])){
-//                $booksGroupByAuthor[$book->getAuthor()->getName()] = [];
-//            }
+        foreach ($authors as $author){
+
+
+
+            $authorWithBooks[$author['id']] = [
+                'name' => $author['name'],
+                'age' => $author['age'],
+                'books' => $author['book'] ,
+            ];
+
+//            foreach ($author['book'] as $book){
+//
+//             }
+
+
+//            $booksGroupByAuthor[$author->getId()][] = [];
+
+//                foreach ($author['book'] as $book){
+//
+//                    if (!isset( $author['book']['id'] )){
+//                        $author['book']['id'] =  $book;
+//
+//                    }
+////                        dump($author);
+//                }
+//            dd($author);
+
+//            dd($author->getBookTags());
+
 //            $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
-//        }
+        }
+
+        dump($authorWithBooks);
+//        dd($booksGroupByAuthor);
+
         return $this->render('admin/author.html.twig', [
-            'books' => $books,
+            'authors' => $authors,
         ]);
     }
 

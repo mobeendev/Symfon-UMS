@@ -55,36 +55,4 @@ class Tag
 
         return $this;
     }
-
-    /**
-     * @return Collection<int, BookTag>
-     */
-    public function getRelatedBooks(): Collection
-    {
-        return $this->relatedBooks;
-    }
-
-    public function addRelatedBook(BookTag $relatedBook): self
-    {
-
-        dd($relatedBook);
-        if (!$this->relatedBooks->contains($relatedBook)) {
-            $this->relatedBooks[] = $relatedBook;
-            $relatedBook->setTag($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRelatedBook(BookTag $relatedBook): self
-    {
-        if ($this->relatedBooks->removeElement($relatedBook)) {
-            // set the owning side to null (unless already changed)
-            if ($relatedBook->getTag() === $this) {
-                $relatedBook->setTag(null);
-            }
-        }
-
-        return $this;
-    }
 }

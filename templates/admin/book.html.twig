@@ -15,24 +15,6 @@
  <div class="col-span-12 mt-6 lg:col-span-4">
   <div class="intro-y pr-1">
    <div class="grid grid-cols-12 gap-5  p-2">
-    <div class="col-span-12 sm:col-span-12 md:col-span-4  xs:col-span-12 xl:col-span-4 xxl:col-span-2 intro-y box mt-2 h-12">
-     <div class="grid grid-cols-12 gap-5 pos__tabs nav-tabs justify-center flex">
-      <div class="col-span-12 flex  items-center">
-       <a data-toggle="tab" data-target="#class" href="{{ path('admin_index') }}"
-          class="flex-1 py-2 mt-2 flat-md text-center active navigation">New Books</a>
-      </div>
-     </div>
-    </div>
-    <div class="col-span-12 sm:col-span-12 md:col-span-4  xs:col-span-12 xl:col-span-4 xxl:col-span-3 intro-y box mt-2 h-12">
-     <div class="grid grid-cols-12 gap-5 pos__tabs nav-tabs justify-center flex">
-      <div class="col-span-12 flex  items-center">
-         <a href="{{ path('admin_book_form') }}" class="button w-24 ml-auto flex bg-gray-200 text-gray-600 dark:bg-dark-1 dark:text-gray-300" >Add New</a>
-      
-      </div>
-
-     </div>
-    </div>
-
     <div class="col-span-12 sm:col-span-12 md:col-span-4  xs:col-span-12 xl:col-span-4 xxl:col-span-3 intro-y box mt-2 h-12">
      <div class="grid grid-cols-12 gap-5 pos__tabs nav-tabs justify-center flex">
       <div class="col-span-12 flex  items-center">
@@ -65,23 +47,7 @@
       </div>
 
   <div class="tab-content">
-
      {% for book in books %}
-
-      Authors :
-   {% for tag in book.bookTags %}
-
-    ({{ tag.author }})
-   {% endfor %}
-
-
-      Tags :
-      {% for tag in book.bookTags %}
-
-       ({{ tag.tag }})
-      {% endfor %}
-
-
       {% set color = 'text-theme-9' %}
       <div class="intro-y mt-1">
        <div class="box grid grid-cols-8  gap-1 mt-5 toggle_details zoom-in">
@@ -94,9 +60,6 @@
         </div>
         <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> $ {{ book.price }} </div>
         <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> {{ book.publishedDate | date("Y-m-d") }} </div>
-        <div class="items-center ml-auto mr-auto  ml-1   pl-2 py-6 mt-3   {{ color }}">
-         22
-        </div>
         <div class="items-center  ml-auto mr-auto  pl-3 py-4 mt-3     ">
          <div class="pos-dropdown dropdown ml-auto sm:ml-0">
           <button class="dropdown-toggle button px-2 box text-gray-900 dark:text-gray-300">
@@ -104,7 +67,7 @@
           </button>
           <div class="pos-dropdown__dropdown-box dropdown-box">
            <div class="dropdown-box__content box dark:bg-dark-1 p-2">
-            <a href="{{ path('admin_index') }}"
+            <a href="{{ path('admin_book_form_edit', {id: book.id}) }}"
                class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md navigation">
              <i data-feather="edit" class="w-4 h-4 mr-2"></i> <span
                      class="check-square">Edit</span> </a>
@@ -123,7 +86,6 @@
       </div>
      {% endfor %}
     {#                {{ include('/admin/partials/pagination.html.twig') }}#}
-
  </div>
 {% endblock %}
 {% block javascript %}

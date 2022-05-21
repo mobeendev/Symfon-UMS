@@ -21,7 +21,7 @@
 
                     <div class="intro-y flex items-center h-10">
                         <h2 class="text-lg font-medium truncate mr-5">
-                            Filter Results
+                            Filter Results--
                         </h2>
                         <a href="{{ path('admin_author_form') }}" class="button w-24 ml-auto flex bg-gray-200 text-gray-600 dark:bg-dark-1 dark:text-gray-300" >Add New</a>
                     </div>
@@ -29,7 +29,7 @@
                 <div class="grid grid-cols-12 gap-4 row-gap-5 mt-5">
                     <div class="intro-y col-span-12 sm:col-span-3  md:col-span-2 lg:col-span-2  xl:col-span-2 xxl:col-span-2">
                         <div class="mb-2">Name</div>
-                        <input type="text"name="user-search" class=" input w-full border js-user-autocomplete"  data-autocomplete-url="{{ path('admin_author') }}"  placeholder="Search by name">
+                        <input type="text"name="user-search" class=" input w-full border js-user-autocomplete"  data-autocomplete-url="{{ path('admin_api_authors') }}"  placeholder="Search by name">
                         <input type="hidden" id="user" name="user">
                     </div>
                     <div class="intro-y col-span-12 sm:col-span-3  md:col-span-2  lg:col-span-2 xl:col-span-2 xxl:col-span-2">
@@ -95,7 +95,7 @@
          - {{ author.name }}
         </div>
         <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> $ {{ author.age }} </div>
-        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> {{ author.country }} </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> {{ author.name }} </div>
         <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> GGG </div>
         <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> GGG </div>
         <div class="items-center  ml-auto mr-auto  pl-3 py-4 mt-3     ">
@@ -121,86 +121,6 @@
          </div>
         </div>
        </div>
-       <div class="detail_record mr-auto">
-       {% if  author.books %}
-         <div class="col-span-12 mt-6 mb-2">
-          <div class="intro-y block sm:flex items-center h-6">
-           <div class="flex items-center sm:ml-auto mt-2 mb-2 sm:mt-0">
-            <a href="javascript:;" data-event-occurrence-id="{{ 123}}"
-               class="button w-22  inline-block mr-1 mb-2 bg-theme-1 view-waiting-list text-white">
-             Delete</a>
-            <a href="javascript:;" data-toggle="modal"
-               data-event-occurrence-id="{{ 444}}"
-               data-target="#header-footer-modal-preview"
-               class="button w-22  inline-block mr-1 mb-2 bg-theme-3 add-new-class-booking text-white">Add
-             New</a>
-           </div>
-          </div>
-          <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
-           <table class="table table-report sm:mt-0">
-            <tbody>
-            {% for  book in author.books %}
-             {% set status  = 1 %}
-             <tr class="intro-x">
-              <td class="w-40">
-               <div class="flex">
-                <div class="w-10 h-10 image-fit zoom-in -ml-3">
-                 <img alt="Midone Tailwind HTML Admin Template"
-                      class="tooltip rounded-full"
-                      src="/admin/dist/images/profile-4.jpg"
-                      title="Uploaded at 17 November 2021">
-                </div>
-                <div class="ml-3 mt-3 mr-auto">
-                 <div class="text-gray-900 text-xs whitespace-no-wrap">{{book.id}}</div>
-                </div>
-               </div>
-              </td>
-              <td class="text-center">
-               <div class="flex">
-                <div class="ml-auto mr-auto mt-1">
-                 <div class="text-xs ">{{book.title}}</div>
-                </div>
-               </div>
-              </td>
-              <td class="text-center text-xs ">{{book.price}}</td>
-              <td class="text-center text-xs ">{{book.topic}}</td>
-
-              <td class="table-report__action w-56">
-               <div class="flex justify-center items-center pl-22">
-                <a class="flex items-center ml-4 mr-3 edit-class-booking"
-                   data-class-booking-id="{{ 22 }}"
-                   data-target="#update-status-modal"
-                   href="javascript:;">
-                 <i data-feather="edit" class="w-4 h-4 mr-1"></i> </a>
-                <a class="flex items-center text-theme-6 delete-item"
-                   data-item-type="ClassBooking"
-                   data-item-id="{{ 33 }}"
-                   href="javascript:;">
-                 <i data-feather="trash-2"
-                    class="w-4 h-4 mr-1"></i> </a>
-               </div>
-              </td>
-             </tr>
-            {% endfor %}
-            </tbody>
-           </table>
-          </div>
-         </div>
-        {% else %}
-         <div class="intro-y block sm:flex items-center h-6 mt-5 mb-4">
-          <h2 class="text-lg font-medium truncate mr-5">
-           No Members Enrolled!
-          </h2>
-          <div class="flex items-center sm:ml-auto mt-3 sm:mt-0">
-           <a href="javascript:;" data-toggle="modal"
-              data-event-occurrence-id="{{ event_occurrence.id }}"
-              data-target="#header-footer-modal-preview"
-              class="button w-22  inline-block mr-1 mb-2 bg-theme-3 add-new-class-booking text-white">Add
-            New</a>
-          </div>
-         </div>
-        {% endif %}
-       </div>
       </div>
      {% endfor %}
     {# {% endfor %} #}
@@ -210,18 +130,9 @@
  </div>
 {% endblock %}
 {% block javascript %}
-<script type="text/javascript">
+<script>
  $(document).ready(function () {
- $(".detail_record").hide();
-
- $(".toggle_details").click(function (e) {
- if (e.target.tagName.toLowerCase() == 'button' || e.target.tagName.toLowerCase() == 'svg') {
- $(".detail_record").hide();
- return;
-}
- $(".toggle_details").not(this).siblings().hide();
- $(this).siblings(".detail_record").toggle();
-});
+     searchUser();
 });
 </script>
 {% endblock %}

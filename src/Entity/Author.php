@@ -34,12 +34,26 @@ class Author
      */
     private $country;
 
+    /**
+     * @ORM\OneToMany(targetEntity=BookTag::class, mappedBy="author",
+     * fetch="EXTRA_LAZY",
+     *  orphanRemoval=true,
+     *  cascade={"persist"}
+     * )
+     */
+    private $bookTags;
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 
 
     public function __construct()
     {
-
+        $this->bookTags = new ArrayCollection();
     }
+
 
 
     public function getId(): ?int
@@ -71,11 +85,6 @@ class Author
         return $this;
     }
 
-    public function __toString()
-    {
-        return $this->name;
-    }
-
     public function getCountry(): ?Country
     {
         return $this->country;
@@ -86,6 +95,14 @@ class Author
         $this->country = $country;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, BookTag>
+     */
+    public function getBookTags(): Collection
+    {
+        return $this->bookTags;
     }
 
 }
