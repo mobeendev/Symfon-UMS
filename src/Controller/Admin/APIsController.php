@@ -9,13 +9,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin/api', name: 'admin_api_')]
+
+/**
+ * @Route("/admin/api", name="admin_api_")
+ */
 class APIsController extends BaseController
 {
 
     public function __construct()
     {
     }
+
 
     /**
      * @Route("/authors", name="authors")

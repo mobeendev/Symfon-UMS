@@ -10,23 +10,31 @@ use App\Form\AuthorType;
 use App\Form\BookType;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
+use App\Repository\CountryRepository;
 use App\Repository\TagRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin', name: 'admin_')]
+
+/**
+ * @Route("/admin", name="admin_")
+ */
 class AdminController extends BaseController
 {
-    #[Route('/', name: 'index')]
-    public function index(): Response
+    /**
+     * @Route("/", name="index")
+     */
+   public function index(): Response
     {
         return $this->render('admin/index.html.twig', [
             'controller_name' => 'AdminController',
         ]);
     }
 
-    #[Route('/book/form/{id}', name: 'book_form')]
+    /**
+     * @Route("/book/form/{id}", name="book_form")
+     */
     public function newBook(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
     {   
 
@@ -66,7 +74,9 @@ class AdminController extends BaseController
 
     }
 
-    #[Route('/book/form/edit/{id}', name: 'book_form_edit')]
+    /**
+     * @Route("/book/form/edit/{id}", name="book_form_edit")
+     */
     public function editBook(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
     {
         $book = null;
@@ -105,9 +115,9 @@ class AdminController extends BaseController
 
     }
 
-
-
-    #[Route('/author/form', name: 'author_form')]
+    /**
+     * @Route("/author/form", name="author_form")
+     */
     public function newAuthor(Request $request, AuthorRepository $authorRepository): Response
     {
         $author = new Author();
@@ -143,55 +153,27 @@ class AdminController extends BaseController
 
 
 
-    #[Route('/author', name: 'author')]
-    public function author(AuthorRepository $authorRepository, BookRepository $bookRepository): Response
+     /**
+     * @Route("/author", name="author")
+     */
+    public function author(AuthorRepository $authorRepository, BookRepository $bookRepository, CountryRepository $countryRepository, Request $request): Response
     {
-        $authors = $authorRepository->getAuthor();
-        $authorWithBooks = [];
-//        dd($authors); ./
+        $authors = $authorRepository->getAuthor($request);
+        //dd($authors);
 
-        foreach ($authors as $author){
-
-
-
-            $authorWithBooks[$author['id']] = [
-                'name' => $author['name'],
-                'age' => $author['age'],
-                'books' => $author['book'] ,
-            ];
-
-//            foreach ($author['book'] as $book){
-//
-//             }
-
-
-//            $booksGroupByAuthor[$author->getId()][] = [];
-
-//                foreach ($author['book'] as $book){
-//
-//                    if (!isset( $author['book']['id'] )){
-//                        $author['book']['id'] =  $book;
-//
-//                    }
-////                        dump($author);
-//                }
-//            dd($author);
-
-//            dd($author->getBookTags());
-
-//            $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
-        }
-
-        dump($authorWithBooks);
-//        dd($booksGroupByAuthor);
+        //Search Filters
+        $countries = $countryRepository->findAll();
 
         return $this->render('admin/author.html.twig', [
             'authors' => $authors,
+            'countries' => $countries,
         ]);
     }
 
 
-    #[Route('/book/borrowed', name: 'book_borrowed')]
+    /**
+     * @Route("/book/borrowed", name="book_borrowed")
+     */
     public function bookBorrowed(BookRepository $bookRepository): Response
     {
         $books = $bookRepository->findAll();
@@ -208,7 +190,9 @@ class AdminController extends BaseController
 
 
     
-    #[Route('/book', name: 'book')]
+     /**
+     * @Route("/book", name="book")
+     */
     public function book(BookRepository $bookRepository): Response
     {
         $books = $bookRepository->findAll();

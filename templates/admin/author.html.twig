@@ -21,50 +21,50 @@
 
                     <div class="intro-y flex items-center h-10">
                         <h2 class="text-lg font-medium truncate mr-5">
-                            Filter Results--
+                            Filter Results
                         </h2>
                         <a href="{{ path('admin_author_form') }}" class="button w-24 ml-auto flex bg-gray-200 text-gray-600 dark:bg-dark-1 dark:text-gray-300" >Add New</a>
                     </div>
 
                 <div class="grid grid-cols-12 gap-4 row-gap-5 mt-5">
-                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-2 lg:col-span-2  xl:col-span-2 xxl:col-span-2">
+
+                    <div class="intro-y w-full col-span-12 sm:col-span-3  md:col-span-2 lg:col-span-2  xl:col-span-2 xxl:col-span-2">
                         <div class="mb-2">Name</div>
-                        <input type="text"name="user-search" class=" input w-full border js-user-autocomplete"  data-autocomplete-url="{{ path('admin_api_authors') }}"  placeholder="Search by name">
-                        <input type="hidden" id="user" name="user">
+                        <input type="text" value="{{ app.request.get('user-search') }}" name="user-search" class=" input w-full border js-user-autocomplete"  data-autocomplete-url="{{ path('admin_api_authors') }}"  placeholder="Search by name">
+                        <input type="hidden" id="user" name="user" value="{{ app.request.get('user') }}" >
                     </div>
                     <div class="intro-y col-span-12 sm:col-span-3  md:col-span-2  lg:col-span-2 xl:col-span-2 xxl:col-span-2">
                         <div class="mb-2">Age</div>
-                        <input type="text" name="amount"   value="{{ app.request.get('amount') }}" class="input w-full border"  placeholder="Enter Amount">
+                        <input type="text" name="age"   value="{{ app.request.get('age') }}" class="input w-full border"  placeholder="Enter Age">
                     </div>
 
                     <div class="intro-y col-span-12 sm:col-span-3  md:col-span-2 lg:col-span-2 xl:col-span-2 xxl:col-span-2">
+
                         <div class="mb-2">Country</div>
-                        <select class="input w-full border flex-1 font-medium select2 autocomplete" id="type"  name="type" data-placeholder="Select Country" data-search-input-placeholder="Search Country" data-allow-clear="true">                        
+                        <select class="input w-full border flex-1 select2 autocomplete" id="country-filter"  name="country" data-placeholder="--Select Country--"  data-search-input-placeholder="Search Country" data-allow-clear="true">
                             <option value="" selected="selected">Select Country</option>
-                            <option value="usa">USA</option>
-                            <option value="in">INDIA</option>
-                            <option value="pak">PAKISTAN</option>
-                            <option value="uk">UK</option>
+                            {% for country in countries %}
+                                <option value="{{ country.id }}">
+                                    {{ country.name | upper}}
+                                </option>
+                            {% endfor %}
                         </select>
                     </div>
 
-                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-2 xxl:col-span-2">
-                        <div class="mb-2">Book ISBN</div>
-                        <input type="text" name="receipt_no"  value="{{ app.request.get('receipt_no') }}"  class="input w-full border"  placeholder="Enter ISBN Number">
-                    </div>
+{#                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-2 xxl:col-span-2">#}
+{#                        <div class="mb-2">Book ISBN</div>#}
+{#                        <input type="text" name="receipt_no"  value="{{ app.request.get('receipt_no') }}"  class="input w-full border"  placeholder="Enter ISBN Number">#}
+{#                    </div>#}
 
+{#                    <div class="intro-y col-span-6 sm:col-span-2  md:col-span-3  lg:col-span-3 xl:col-span-2 xxl:col-span-2">#}
+{#                        <div class="mb-2">Published Start</div>#}
+{#                        <input type="datetime-local" value="{{app.request.query.get('published') ? app.request.query.get('payment_start') | date("Y-m-d\\TH:i") : '' }}" id="payment_start" name="payment_start"  class="input w-full border flex-1" >#}
+{#                    </div>#}
 
-                   
-
-                    <div class="intro-y col-span-6 sm:col-span-2  md:col-span-3  lg:col-span-3 xl:col-span-2 xxl:col-span-2">
-                        <div class="mb-2">Published Start</div>
-                        <input type="datetime-local" value="{{app.request.query.get('published') ? app.request.query.get('payment_start') | date("Y-m-d\\TH:i") : '' }}" id="payment_start" name="payment_start"  class="input w-full border flex-1" >
-                    </div>
-
-                    <div class="intro-y col-span-6 sm:col-span-2  md:col-span-3  lg:col-span-3 xl:col-span-2 xxl:col-span-2">
-                        <div class="mb-2">Published End</div>
-                        <input type="datetime-local" value="{{app.request.query.get('published') ? app.request.query.get('payment_end') | date("Y-m-d\\TH:i") : '' }}" id="payment_end" name="payment_end"  class="input w-full border flex-1" >
-                    </div>
+{#                    <div class="intro-y col-span-6 sm:col-span-2  md:col-span-3  lg:col-span-3 xl:col-span-2 xxl:col-span-2">#}
+{#                        <div class="mb-2">Published End</div>#}
+{#                        <input type="datetime-local" value="{{app.request.query.get('published') ? app.request.query.get('payment_end') | date("Y-m-d\\TH:i") : '' }}" id="payment_end" name="payment_end"  class="input w-full border flex-1" >#}
+{#                    </div>#}
                     <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end pb-5">
                         <button type="submit" id="payment_btn_submit" class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3 "  >Search</button>
                         <button type="submit" id="btn-reset" class="button w-24 justify-center block bg-gray-200 text-gray-600 dark:bg-dark-1 dark:text-gray-300" >Reset</button>
@@ -94,9 +94,9 @@
         <div class="items-center ml-auto mr-auto  ml-1    py-6 mt-2  ">
          - {{ author.name }}
         </div>
-        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> $ {{ author.age }} </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> {{ author.age }} years </div>
         <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> {{ author.name }} </div>
-        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> GGG </div>
+        <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  ">  {{ author.country }}  </div>
         <div class="items-center ml-auto mr-auto  ml-3    pl-1 py-6 mt-2  "> GGG </div>
         <div class="items-center  ml-auto mr-auto  pl-3 py-4 mt-3     ">
          <div class="pos-dropdown dropdown ml-auto sm:ml-0">
@@ -132,7 +132,16 @@
 {% block javascript %}
 <script>
  $(document).ready(function () {
-     searchUser();
+     searchUser('author');
+
+     setTimeout(function()
+     {
+         if ("{{ app.request.get('country')}}" != ''){
+                    $("#country-filter").val("{{ app.request.get('country')}}").trigger("change");
+          }
+     }, 1000);
+
+
 });
 </script>
 {% endblock %}

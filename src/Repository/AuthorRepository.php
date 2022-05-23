@@ -38,27 +38,40 @@ class AuthorRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getArrayResult();
     }
-    public function getAuthor()
+    public function getAuthor($query)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb
-            ->select('a.id, a.name, a.age, b as book')
+            ->select('a.id, a.name, a.age, cont.name as country')
             ->from('App:Author','a')
-             ->leftJoin(
-                    BookTag::class,
-                    'bt',
-                    \Doctrine\ORM\Query\Expr\Join::WITH,
-                    'bt.author = a'
-                )
-            ->leftJoin(
-                Book::class,
-                'b',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
-                'bt.book = b'
-            )
+            ->leftJoin('App:Country', 'cont', 'WITH', 'a.country = cont');
 
-            ->setMaxResults(100);
+//        if ($query->get('user')) {
+//
+//                $qb ->andWhere('a.name LIKE :name')
+//                    ->setParameter('name', strtolower(str_replace(' ', '%', $query->get('user'))).'%');
+//        }
+
+        if ($query->get('user')) {
+            $qb
+                ->andWhere('a.id = :id')
+                ->setParameter('id', $query->get('user'));
+        }
+
+        if ($query->get('country')) {
+            $qb
+                ->andWhere('a.country = :country')
+                ->setParameter('country', $query->get('country'));
+        }
+
+        if ($query->get('age')) {
+            $qb
+                ->andWhere('a.age = :age')
+                ->setParameter('age', $query->get('age'));
+        }
+
+            $qb->setMaxResults(100);
 
         return $qb->getQuery()->getArrayResult();
 
