@@ -16,7 +16,7 @@ security:
             lazy: true
             provider: app_user_provider
             entry_point: form_login
-#            custom_authenticator: App\Security\LoginFormAuthenticator
+            custom_authenticator: App\Security\LoginFormAuthenticator
             form_login:
                 login_path: app_login
                 check_path: app_login
@@ -24,11 +24,11 @@ security:
                 password_parameter: password
                 enable_csrf: true
             logout: true
-            remember_me:
-                secret: '%kernel.secret%'
-                signature_properties: [ password , id ]
-                always_remember_me: true
-            custom_authenticator: App\Security\DummyAuthenticator
+#            remember_me:
+#                secret: '%kernel.secret%'
+#                signature_properties: [ password , id ]
+#                always_remember_me: true
+#            custom_authenticator: App\Security\DummyAuthenticator
             # switch_user: true
 
     # access_control:

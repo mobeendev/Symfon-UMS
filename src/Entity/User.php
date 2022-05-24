@@ -41,6 +41,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     private $plainPassword;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $dob;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=DepartmentCode::class)
+     */
+    private $departmentCode;
+
     public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
@@ -157,6 +172,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->firstName;
-        // TODO: Implement __toString() method.
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getDob(): ?\DateTimeInterface
+    {
+        return $this->dob;
+    }
+
+    public function setDob(\DateTimeInterface $dob): self
+    {
+        $this->dob = $dob;
+
+        return $this;
+    }
+
+    public function getDepartmentCode(): ?DepartmentCode
+    {
+        return $this->departmentCode;
+    }
+
+    public function setDepartmentCode(?DepartmentCode $departmentCode): self
+    {
+        $this->departmentCode = $departmentCode;
+
+        return $this;
     }
 }
