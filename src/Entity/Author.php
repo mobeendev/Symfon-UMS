@@ -37,7 +37,7 @@ class Author
     /**
      * @ORM\OneToMany(targetEntity=BookTag::class, mappedBy="author",
      * fetch="EXTRA_LAZY",
-     *  orphanRemoval=true,
+     * orphanRemoval=true,
      *  cascade={"persist"}
      * )
      */

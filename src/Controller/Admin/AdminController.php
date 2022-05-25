@@ -6,11 +6,14 @@ use App\Controller\BaseController;
 use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\BookTag;
+use App\Entity\Department;
 use App\Form\AuthorType;
 use App\Form\BookType;
+use App\Form\DepartmentType;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
 use App\Repository\CountryRepository;
+use App\Repository\DepartmentRepository;
 use App\Repository\TagRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -205,4 +208,65 @@ class AdminController extends BaseController
         ]);
     }
 
+    /**
+     * @Route("/department/form/{id}", name="department_form")
+     */
+    public function formDepartment(Request $request, DepartmentRepository $departmentRepository, $id = null): Response
+    {
+        $department = new Department();
+        $formInformation = [ 'header_label' => 'New Department', 'button_label' => 'Cancel' ];
+        $formIcon = null;
+
+        if (isset($id) && !empty($id)){
+            $department = $departmentRepository->find($id);
+            $formInformation = [ 'header_label' => 'Update Department', 'button_label' => 'Back' ];
+        }
+
+        $form = $this->createForm(DepartmentType::class, $department);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($department);
+            $this->em->flush();
+            $this->addFlash('success', 'Department updated with success.');
+        }
+
+        return $this->render('admin/department-form.html.twig', [
+            'form' => $form->createView(),
+            'formIcon' => $formIcon != null ? $formIcon->createView() : '',
+            'formInformation' => $formInformation
+        ]);
+    }
+
+    /**
+     * @Route("/department", name="department")
+     */
+    public function department(DepartmentRepository $departmentRepository): Response
+    {
+        $departments = $departmentRepository->findBy([],['id'=>'desc']);
+
+//        $books = $bookRepository->findAll();
+        $booksGroupByAuthor = [];
+
+//        dump($departments);
+        $jsonDeparment = [];
+        $jsonLocationCategories = [];
+        $jsonCountries = [];
+
+        foreach ($departments as $department) {
+            $jsonDeparment[] = [
+                'id' => $department->getId(),
+                'name' => $department->getName(),
+                'code' => $department->getCode(),
+                'type' => 'Department',
+            ];
+        }
+
+        $jsonDeparment = json_encode($jsonDeparment);
+
+        dump($jsonDeparment);
+        return $this->render('admin/department.html.twig', [
+            'departments' => $jsonDeparment,
+        ]);
+    }
 }
