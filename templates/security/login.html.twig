@@ -1,49 +1,82 @@
-{% extends 'layout.html.twig' %}
 
-{% block content %}
-
-    <main>
-        <div class="album py-5 bg-light">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>UMS - Login</title>
+    <link href="/front/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-primary">
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
             <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-5">
+                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+                            <div class="card-body">
+                                {% if error %}
+                                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                {% endif %}
 
-                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                                {% if app.user %}
+                                    <div class="mb-3">
+                                        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                                    </div>
+                                {% endif %}
+                                <form method="post">
+                                    <div class="form-floating mb-3">
+                                        <input type="email" value="{{ last_username }}"  name="email" id="inputEmail"  class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
+                                        <label for="inputEmail">Email address</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="password" name="password" id="inputPassword" class="form-control"  placeholder="Password">
+                                        <label for="inputPassword">Password</label>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
+                                        <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                        <a class="small" href="password.html">Forgot Password?</a>
+                                        <input type="hidden" name="_csrf_token"  value="{{ csrf_token('authenticate') }}">
 
-                <div class="row row-cols-12 g-3">
-
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
-
-                    {% if app.user %}
-                        <div class="mb-3">
-                            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                                        {#                                        <a class="btn btn-primary" href="index.html">Login</a>#}
+                                        <button type="submit" class="btn btn-primary float-end">Sign in</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center py-3">
+                                <div class="small"><a href="{{ path('registration') }}">Need an account? Sign up!</a></div>
+                            </div>
                         </div>
-                    {% endif %}
-
-                    <form method="post">
-
-
-                    <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" value="{{ last_username }}"  name="email" id="inputEmail"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" name="password" id="inputPassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                        </div>
-{#                        <div class="form-check">#}
-{#                            <input type="checkbox" class="form-check-input" id="exampleCheck1">#}
-{#                            <label class="form-check-label" for="exampleCheck1">Check me out</label>#}
-{#                        </div>#}
-                        <br>
-                        <input type="hidden" name="_csrf_token"  value="{{ csrf_token('authenticate') }}">
-                        <button type="submit" class="btn btn-primary float-end">Sign in</button>
-                    </form>
-
+                    </div>
                 </div>
             </div>
-        </div>
-
-    </main>
-{% endblock %}
+        </main>
+    </div>
+    <div id="layoutAuthentication_footer">
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/front/js/scripts.js"></script>
+</body>
+</html>
