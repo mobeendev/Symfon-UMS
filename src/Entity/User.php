@@ -186,12 +186,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDob(): ?\DateTimeInterface
+    public function getDob()
     {
         return $this->dob;
     }
 
-    public function setDob(\DateTimeInterface $dob): self
+    public function setDob($dob): self
     {
         $this->dob = $dob;
 

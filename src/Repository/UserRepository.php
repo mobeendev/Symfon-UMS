@@ -47,4 +47,24 @@ class UserRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function userHasRole($id ,$role) {
+        // Entity manager
+        $em= $this->getDoctrine()->getManager();
+    $qb = $em->createQueryBuilder();
+
+    $qb->select('u')
+        ->from('userBundle:User', 'u') // Change this to the name of your bundle and the name of your mapped user Entity
+        ->where('u.id = :user')
+        ->andWhere('u.roles LIKE :roles')
+        ->setParameter('user', $id)
+        ->setParameter('roles', '%"' . $role . '"%');
+
+        $user = $qb->getQuery()->getResult();
+
+        if(count($user) >= 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

@@ -28,13 +28,15 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     private UrlGeneratorInterface $urlGenerator;
+    private Security $security;
 
-    public function __construct(UserRepository $userRepository , RouterInterface $router,UrlGeneratorInterface $urlGenerator)
+    public function __construct(UserRepository $userRepository , RouterInterface $router,UrlGeneratorInterface $urlGenerator, Security $security)
     {
         $this->userRepository = $userRepository;
         $this->router = $router;
         $this->userRepository = $userRepository;
         $this->urlGenerator = $urlGenerator;
+        $this->security = $security;
 
     }
 
@@ -70,10 +72,12 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 //        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
 //            return new RedirectResponse($targetPath);
 //        }
-
-        // For example:
+        if ($this->security->isGranted('ROLE_ADMIN')){
+            return new RedirectResponse($this->urlGenerator->generate('admin_index'));
+        }else if($this->security->isGranted('ROLE_ADMIN')){
+            return new RedirectResponse($this->urlGenerator->generate('app_home'));
+        }
          return new RedirectResponse($this->urlGenerator->generate('app_home'));
-//        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
     protected function getLoginUrl(Request $request): string
