@@ -13,26 +13,23 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
  */
 class FrontController extends AbstractController
 {
-
     /**
      * @Route("/home", name="home")
      */
     public function home(): Response
     {
-        return $this->render('front/index.html.twig', [
+        return $this->render('front/home.html.twig', [
                 'controller_name' => 'FrontController',
         ]);
     }
 
-//    /**
-//     * @Route("/", name="index")
-//     */
-//    public function index(): Response
-//    {
-//        return $this->render('front/home.html.twig', [
-//            'controller_name' => 'FrontController',
-//        ]);
-//    }
-
-
+    /**
+     * @Route("/", name="index")
+     */
+    public function index(): Response
+    {
+        return $this->render('front/index.html.twig', [
+            'controller_name' => 'FrontController',
+        ]);
+    }
 }

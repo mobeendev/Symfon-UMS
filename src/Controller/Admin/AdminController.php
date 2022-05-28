@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Controller\BaseController;
 use App\Entity\Author;
 use App\Entity\Book;
-use App\Entity\BookTag;
 use App\Entity\Department;
 use App\Form\AuthorType;
 use App\Form\BookType;
@@ -18,12 +17,9 @@ use App\Repository\TagRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-
 
 /**
  * @Route("/admin", name="admin_")
@@ -44,8 +40,6 @@ class AdminController extends BaseController
      */
    public function index(): Response
     {
-//        dd($this->getUser()->getRoles());
-
         return $this->render('admin/index.html.twig', [
             'controller_name' => 'AdminController',
         ]);

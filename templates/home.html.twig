@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="bg-light p-5 rounded">
+        <div class="col-sm-8 py-5 mx-auto">
+            <h1 class="display-5 fw-normal">University Managment System</h1>
+            <p class="fs-5">This example shows how responsive offcanvas menus work within the navbar. For positioning of navbars, checkout the <a href="/docs/5.2/examples/navbar-static/">top</a> and <a href="/docs/5.2/examples/navbar-fixed/">fixed top</a> examples.</p>
+            <p>From the top down, you'll see a dark navbar, light navbar and a responsive navbar—each with offcanvases built in. Resize your browser window to the large breakpoint to see the toggle for the offcanvas.</p>
+        </div>
+
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <p>
+                        <a href="{{ path('app_login') }}" class="btn btn-primary my-2">Login</a> OR
+                        <a href="{{ path('app_register') }}"  class="btn btn-secondary my-2">Create new account</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+
+{% endblock %}
