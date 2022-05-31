@@ -15,6 +15,7 @@ use App\Repository\CountryRepository;
 use App\Repository\DepartmentRepository;
 use App\Repository\TagRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
@@ -29,8 +30,9 @@ class AdminController extends BaseController
 {
     private Security $security;
 
-    public function __construct(UserRepository $userRepository , Security $security)
+    public function __construct(EntityManagerInterface $em, UserRepository $userRepository , Security $security)
     {
+        parent::__construct($em);
         $this->userRepository = $userRepository;
         $this->security = $security;
 

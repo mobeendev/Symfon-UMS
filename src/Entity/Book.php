@@ -48,6 +48,11 @@ class Book
      */
     private $bookTags;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $is_booked;
+
     public function __toString()
     {
         return $this->title;
@@ -140,6 +145,18 @@ class Book
                 $bookTag->setBook(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsBooked(): ?int
+    {
+        return $this->is_booked;
+    }
+
+    public function setIsBooked(?int $is_booked): self
+    {
+        $this->is_booked = $is_booked;
 
         return $this;
     }
