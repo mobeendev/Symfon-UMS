@@ -6,9 +6,11 @@ use App\Controller\BaseController;
 use App\Entity\Author;
 use App\Entity\Book;
 use App\Entity\Department;
+use App\Entity\Tag;
 use App\Form\AuthorType;
 use App\Form\BookType;
 use App\Form\DepartmentType;
+use App\Form\TagsType;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
 use App\Repository\CountryRepository;
@@ -52,38 +54,38 @@ class AdminController extends BaseController
      */
     public function bookForm(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
     {
-        $book = new Book();
-        $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
+            $book = new Book();
+            $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
 
-        if (isset($id) && !empty($id)){
-            $book = $bookRepository->find($id);
-            $formInformation = [ 'header_label' => 'Update Book', 'button_label' => 'Back' ];
-        }
-
-        $form = $this->createForm(BookType::class, $book);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-                $this->em->persist($book);
-
-            foreach($book->getBookTags() as $bookTag){
-
-                $book->addBookTag($bookTag);
-                $this->em->persist($book);
+            if (isset($id) && !empty($id)){
+                $book = $bookRepository->find($id);
+                $formInformation = [ 'header_label' => 'Update Book', 'button_label' => 'Back' ];
             }
 
-            $this->em->flush();
-            $this->addFlash('success', 'Book created with success.');
-            return $this->redirectToRoute('admin_book');
+            $form = $this->createForm(BookType::class, $book);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $this->em->persist($book);
+
+                foreach($book->getBookTags() as $bookTag){
+
+                    $book->addBookTag($bookTag);
+                    $this->em->persist($book);
+                }
+
+                $this->em->flush();
+                $this->addFlash('success', 'Book created with success.');
+                return $this->redirectToRoute('admin_book');
+            }
+
+            return $this->render('admin/book-form.html.twig', [
+                'form' => $form->createView(),
+                'formInformation' => $formInformation
+            ]);
+
         }
-
-        return $this->render('admin/book-form.html.twig', [
-            'form' => $form->createView(),
-            'formInformation' => $formInformation
-        ]);
-
-    }
     /**
      * @Route("/author/form/{id}", name="author_form")
      */
@@ -99,7 +101,7 @@ class AdminController extends BaseController
 
         $form = $this->createForm(AuthorType::class, $author);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($author);
             $this->em->flush();
@@ -195,6 +197,7 @@ class AdminController extends BaseController
     /**
      * @Route("/department", name="department")
      */
+
     public function department(DepartmentRepository $departmentRepository): Response
     {
         $departments = $departmentRepository->findBy([],['id'=>'desc']);
@@ -213,6 +216,48 @@ class AdminController extends BaseController
 
         return $this->render('admin/department.html.twig', [
             'departments' => $jsonDeparment,
+        ]);
+    }
+
+
+    /**
+     * @Route("/tag", name="tag")
+     */
+    public function tag(TagRepository $tagRepository): Response
+    {
+        $tags = $tagRepository->findAll();
+
+        return $this->render('admin/tag.html.twig', [
+            'tags' => $tags,
+        ]);
+    }
+
+    /**
+     * @Route("/tag/form/{id}", name="tag_form")
+     */
+    public function tagForm(Request $request, TagRepository $tagRepository, $id = null): Response
+    {
+        $tag = new Tag();
+        $formInformation = [ 'header_label' => 'New Tag', 'button_label' => 'Cancel' ];
+
+        if (isset($id) && !empty($id)){
+            $tag = $tagRepository->find($id);
+            $formInformation = [ 'header_label' => 'Tag Department', 'button_label' => 'Back' ];
+        }
+
+        $form = $this->createForm(TagsType::class, $tag);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $tagRepository->add($tag,true);
+            $this->addFlash('success', 'Tag created with success.');
+
+            return $this->redirectToRoute('admin_tag');
+        }
+
+        return $this->render('admin/tag-form.html.twig', [
+            'form' => $form->createView(),
+            'formInformation' => $formInformation,
         ]);
     }
 }

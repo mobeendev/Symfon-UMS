@@ -18,7 +18,7 @@
             <li>
                 <a href="javascript:;" class="menu">
                     <div class="menu__icon"> <i data-feather="box"></i> </div>
-                    <div class="menu__title"> Planning <i data-feather="chevron-down" class="menu__sub-icon"></i> </div>
+                    <div class="menu__title"> Books <i data-feather="chevron-down" class="menu__sub-icon"></i> </div>
                 </a>
                 <ul class="">
                     <li>
@@ -86,29 +86,38 @@
                     <div class="top-menu__title"> Dashboard </div>
                 </a>
             </li>
-
             <li>
-                <a href="{{ path('admin_book') }}" class=" top-menu {{  current_path == 'admin_book'? 'top-menu--active'}}"    >
-                    <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
-                    <div class="top-menu__title"> Books </div>
+                <a  href="{{ path('admin_book')}}" class=" top-menu {{  current_path == 'admin_book' ? 'top-menu--active'}}"    >
+                    <div class="top-menu__icon"><i data-feather="shopping-bag"></i> </div>
+                    <div class="top-menu__title"> Books <i data-feather="chevron-down" class="top-menu__sub-icon"></i> </div>
                 </a>
+                <ul class="">
+                    <li>
+                        <a href="{{ path('admin_book') }}" class="top-menu">
+                            <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
+                            <div class="top-menu__title"> Listing </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_tag') }}" class="top-menu">
+                            <div class="top-menu__icon"> <i data-feather="activity"></i> </div>
+                            <div class="top-menu__title"> Tags </div>
+                        </a>
+                    </li>
+                </ul>
             </li>
-
             <li>
                 <a href="{{ path('admin_department') }}" class=" top-menu {{  current_path == 'admin_department'? 'top-menu--active'}}"    >
                     <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
                     <div class="top-menu__title"> Departments </div>
                 </a>
             </li>
-
-
             <li>
                 <a href="{{ path('admin_author') }}" class=" top-menu {{  current_path == 'admin_author'? 'top-menu--active'}}"    >
                     <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
                     <div class="top-menu__title"> Authors </div>
                 </a>
             </li>
-
         </ul>
     </nav>
     <!-- END: Top Menu -->
@@ -116,6 +125,5 @@
     <div class="content">
         {% block content %}
         {% endblock %}
-{#        {{ include('/admin/partials/delete-record-modal.html.twig') }}#}
     </div>
 {% endblock %}

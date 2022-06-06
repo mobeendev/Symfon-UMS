@@ -14,17 +14,16 @@ class TagsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('tag', TextType::class, [
+            ->add('name', TextType::class, [
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Enter name',
                     'class' => 'input  w-full border mt-2',
-                ],                'constraints' => [
+                ],
+                'constraints' => [
                     new NotBlank(),
                 ],
             ]);
-
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

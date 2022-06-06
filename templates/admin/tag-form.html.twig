@@ -1,0 +1,8 @@
+{% extends 'admin/_template/layout.html.twig' %}
+{% block content %}
+    {{ include('admin/forms/_tag.html.twig', {
+        form: form,
+        header_label: formInformation.header_label,
+        button_label: formInformation.button_label,
+    }, with_context = false) }}
+{% endblock %}

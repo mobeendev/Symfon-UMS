@@ -1,0 +1,199 @@
+{% extends 'admin/_template/layout.html.twig' %}
+
+{% block title %}User Companies{% endblock %}
+{% block content %}
+    <!-- BEGIN: Search Filters  -->
+    <div class="intro-y box p-2 mt-1 mb-1 pb-1">
+        {{ include('/admin/partials/_filters_btn.html.twig') }}
+        <form class="px-5" action="{{ path('admin_book')}}"  id="tabulator-html-filter-form">
+            <div class="px-5 pt-1 mt-2 toggle-filter">
+
+                <div class="font-medium text-base">Search Company</div>
+                <div class="grid grid-cols-12 gap-2 row-gap-2 mt-5 ">
+
+                    <div class="intro-y  col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-3 xxl:col-span-3">
+                        <div class="mb-2 font-small">Search User</div>
+                        <div class="mb-3 flex items-center">
+                            <input type="text"  class=" input w-full border js-user-autocomplete"  value="{{ app.request.get('user-search') }}" name="user-search" data-autocomplete-url="{{ path('admin_api_authors') }}"  placeholder="Search User by oxpin ...">
+                            <input type="hidden" name="user" id="user"  value="{{ app.request.get('user') }}"   >
+                            <div class="ml-2 mr-auto">
+                                <div id="ajax_wrapper"><div id="ajax_wrapper_filter"></div></div>
+                            </div>
+                        </div>
+                        <div class="text-theme-6 mt-2 hidden" id="user-validation-feedback"></div>
+                    </div>
+
+
+{#                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-3 xl:col-span-3 xxl:col-span-3">#}
+{#                        <div class="mb-2 font-small">Type</div>#}
+{#                        <select class="input w-full border flex-1 font-medium select2 autocomplete" id="company_type"  name="company_type" data-placeholder="Select Type" data-search-input-placeholder="Company Type" data-allow-clear="true">#}
+{#                            <option value=""></option>#}
+{#                            {% for company_type in company_types %}#}
+{#                                <option value="{{ company_type }}" >#}
+{#                                    {{ company_type | capitalize  }}#}
+{#                                </option>#}
+{#                            {% endfor %}#}
+{#                        </select>#}
+{#                    </div>#}
+
+                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-3 xl:col-span-3 xxl:col-span-3">
+                        <div class="mb-2 font-small">Role</div>
+                        <select class="input w-full border flex-1 font-medium select2 autocomplete" id="role"  name="role" data-placeholder="Select Role" data-search-input-placeholder="Company Role" data-allow-clear="true">
+                            <option value=""></option>
+                            <option value="ROLE_MANAGER">ROLE_MANAGER</option>
+                            <option value="ROLE_STAFF">ROLE_STAFF</option>
+                        </select>
+                    </div>
+
+
+                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-3 xl:col-span-3 xxl:col-span-3">
+                        <div class="mb-2 font-small">Status</div>
+                        <select class="input w-full border flex-1 font-medium select2 autocomplete" id="status"  name="status" data-placeholder="Select Status" data-search-input-placeholder="Company Status" data-allow-clear="true">
+                            <option value=""></option>
+                            <option value="1">Active</option>
+                            <option value="0">In Active</option>
+                        </select>
+                    </div>
+
+
+                    <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end pb-2 mt-2">
+                        <button type="submit" class="button w-24  sm:col-span-6  justify-center block bg-theme-1 text-white ml-2 mr-3 navigation"  >Search</button>
+                        <button   type="submit" id="btn-reset" class="button  sm:col-span-6  w-24 justify-center block bg-gray-200 text-gray-600 dark:bg-dark-1 dark:text-gray-300" >Reset</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- END: Search Filters -->
+
+    <div class="intro-y block sm:flex items-center h-6 mt-5 mb-4">
+        <div class="flex items-center sm:ml-auto mt-3 sm:mt-0">
+            <a href="{{ path('admin_tag_form') }}" data-toggle="modal" data-event-occurrence-id="40572" data-target="#header-footer-modal-preview" class="button w-22  inline-block mr-1 mb-2 bg-theme-3 add-new-class-booking text-white">Add
+                New</a>
+        </div>
+    </div>
+
+    <div class="intro-y col-span-12 overflow-auto lg:overflow-visible mt-5">
+        <table class="table table-report -mt-2">
+            <thead>
+            <tr>
+                <th class="whitespace-no-wrap">Company#</th>
+                <th class="whitespace-no-wrap">OWNER</th>
+                <th class="whitespace-no-wrap">TYPE</th>
+                <th class="whitespace-no-wrap">ROLE</th>
+                <th class="whitespace-no-wrap">ACTION</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for tag in tags %}
+
+                <tr class="intro-x zoom-in">
+                    <td>
+                        <a  href="{{ path('admin_book' , {id:tag.id}) }}" class="font-medium whitespace-no-wrap">12</a>
+                    </td>
+
+                    <td>
+                        <div class="font-medium whitespace-no-wrap py-3 ">
+                            {{ tag.id }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="font-medium whitespace-no-wrap py-3 ">
+                            {{ tag.name }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="font-medium whitespace-no-wrap py-3 ">
+                            asdfkl
+                        </div>
+                    </td>
+
+{#                    <td>#}
+{#                        <div class="font-medium whitespace-no-wrap py-3 ">#}
+{#                            {% if data == 1 %}#}
+{#                                <div class="items-center ml-auto mr-auto   ml-1 text-theme-9"> ACTIVE </div>#}
+{#                            {% else %}#}
+{#                                <div class="items-center ml-auto mr-auto   ml-1 text-theme-6"> INACTIVE </div>#}
+{#                            {% endif %}#}
+{#                        </div>#}
+{#                    </td>#}
+
+
+                    <td>
+                        <div class="font-medium whitespace-no-wrap py-3 ">
+                            <div class="flex">
+                                <a class="flex items-center edit-item" href="{{ path('admin_tag_form' , {id:tag.id}) }}"
+                                   data-item-type="" data-item-id="{{ tag.id }}"> <i data-feather="edit"
+                                                                                      class="w-4 h-4 mr-1"></i>
+                                </a>
+                                <a class="flex items-center text-theme-6 delete-item" href="javascript:;"
+                                   data-item-type="" data-item-id="{{ tag.id }}"> <i data-feather="trash-2"
+                                                                                      class="w-4 h-4 mr-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- BEGIN: Pagination -->
+{#        {{ include('/admin/partials/pagination.html.twig') }}#}
+        <!-- END: Pagination -->
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            hideFilterMiniLoader();
+            resetUserNotFoundError();
+            searchUser('usercompany');
+
+            $('#company-validation-feedback').html('');
+
+            setTimeout(function()
+            {
+                if ("{{ app.request.get('status')}}" != ''){
+                    $("#status").val("{{ app.request.get('status')}}").trigger("change");
+                }
+
+                if ("{{ app.request.get('type')}}" != ''){
+                    $("#type").val("{{ app.request.get('type')}}").trigger("change");
+                }
+
+                if ("{{ app.request.get('role')}}" != ''){
+                    $("#role").val("{{ app.request.get('role')}}").trigger("change");
+                }
+
+                if ("{{ app.request.get('company_type')}}" != ''  &&  "app.request.get('company_type')}}" != -1){
+                    $("#company_type").val("{{ app.request.get('company_type')}}").trigger("change");
+                }
+
+                if ("{{ app.request.get('location')}}" != ''){
+                    $("#location").val("{{ app.request.get('location')}}").trigger("change");
+                }
+
+            }, 1000);
+
+            $("#btn-reset").click(function (event) {
+                window.location.assign("{{ path('user_company_index') }}");
+                startLoader();
+                event.preventDefault();
+            });
+
+            $("#tabulator-html-filter-go").click(function (event) {
+                startLoader();
+            });
+
+
+        });
+
+    </script>
+{% endblock %}
