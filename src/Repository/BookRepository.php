@@ -51,11 +51,16 @@ class BookRepository extends ServiceEntityRepository implements BookRepositoryIn
     public function getAllAvailable()
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.is_booked IS NULL')
-            ->orWhere('b.is_booked = 0')
+            ->andWhere('b.isBooked IS NULL')
+            ->orWhere('b.isBooked = 0')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
             ;
+    }
+
+    public function isBookAvailable($id)
+    {
+        return $id;
     }
 }

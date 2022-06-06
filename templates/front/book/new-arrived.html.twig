@@ -28,8 +28,8 @@
                         <td>- {{ book.price }}</td>
                         <td>
                             <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
-                            <button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button>
-                            <button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                            <a class="btn btn-success" href="{{ path('book_borrow',{id:book.id} ) }}" role="button"><i class="fas fa-plus"></i> Borrow</a>
+
                         </td>
                     </tr>
                     {% endfor %}

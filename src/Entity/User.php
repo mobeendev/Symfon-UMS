@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -55,6 +57,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToOne(targetEntity=DepartmentCode::class)
      */
     private $departmentCode;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Borrow::class, mappedBy="user")
+     */
+    private $borrows;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BookingRequest::class, mappedBy="user")
+     */
+    private $bookingRequests;
+
+    public function __construct()
+    {
+        $this->borrows = new ArrayCollection();
+        $this->bookingRequests = new ArrayCollection();
+    }
 
     public function getPlainPassword(): ?string
     {
@@ -206,6 +224,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDepartmentCode(?DepartmentCode $departmentCode): self
     {
         $this->departmentCode = $departmentCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Borrow>
+     */
+    public function getBorrows(): Collection
+    {
+        return $this->borrows;
+    }
+
+    public function addBorrow(Borrow $borrow): self
+    {
+        if (!$this->borrows->contains($borrow)) {
+            $this->borrows[] = $borrow;
+            $borrow->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBorrow(Borrow $borrow): self
+    {
+        if ($this->borrows->removeElement($borrow)) {
+            // set the owning side to null (unless already changed)
+            if ($borrow->getUser() === $this) {
+                $borrow->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BookingRequest>
+     */
+    public function getBookingRequests(): Collection
+    {
+        return $this->bookingRequests;
+    }
+
+    public function addBookingRequest(BookingRequest $bookingRequest): self
+    {
+        if (!$this->bookingRequests->contains($bookingRequest)) {
+            $this->bookingRequests[] = $bookingRequest;
+            $bookingRequest->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingRequest(BookingRequest $bookingRequest): self
+    {
+        if ($this->bookingRequests->removeElement($bookingRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($bookingRequest->getUser() === $this) {
+                $bookingRequest->setUser(null);
+            }
+        }
 
         return $this;
     }

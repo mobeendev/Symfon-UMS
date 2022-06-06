@@ -51,7 +51,17 @@ class Book
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $is_booked;
+    private $isBooked;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Borrow::class, mappedBy="book")
+     */
+    private $borrows;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BookingRequest::class, mappedBy="book")
+     */
+    private $bookingRequests;
 
     public function __toString()
     {
@@ -61,6 +71,8 @@ class Book
     public function __construct()
     {
         $this->bookTags = new ArrayCollection();
+        $this->borrows = new ArrayCollection();
+        $this->bookingRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,12 +163,72 @@ class Book
 
     public function getIsBooked(): ?int
     {
-        return $this->is_booked;
+        return $this->isBooked;
     }
 
-    public function setIsBooked(?int $is_booked): self
+    public function setIsBooked(?int $isBooked): self
     {
-        $this->is_booked = $is_booked;
+        $this->isBooked = $isBooked;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Borrow>
+     */
+    public function getBorrows(): Collection
+    {
+        return $this->borrows;
+    }
+
+    public function addBorrow(Borrow $borrow): self
+    {
+        if (!$this->borrows->contains($borrow)) {
+            $this->borrows[] = $borrow;
+            $borrow->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBorrow(Borrow $borrow): self
+    {
+        if ($this->borrows->removeElement($borrow)) {
+            // set the owning side to null (unless already changed)
+            if ($borrow->getBook() === $this) {
+                $borrow->setBook(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BookingRequest>
+     */
+    public function getBookingRequests(): Collection
+    {
+        return $this->bookingRequests;
+    }
+
+    public function addBookingRequest(BookingRequest $bookingRequest): self
+    {
+        if (!$this->bookingRequests->contains($bookingRequest)) {
+            $this->bookingRequests[] = $bookingRequest;
+            $bookingRequest->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingRequest(BookingRequest $bookingRequest): self
+    {
+        if ($this->bookingRequests->removeElement($bookingRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($bookingRequest->getBook() === $this) {
+                $bookingRequest->setBook(null);
+            }
+        }
 
         return $this;
     }

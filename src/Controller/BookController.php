@@ -4,33 +4,25 @@ namespace App\Controller;
 
 use App\Interfaces\BookRepositoryInterface;
 use App\Repository\BookRepository;
+use App\Service\BookingService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
- * @Route("/student", name="student_")
+ * @Route("/book", name="book_")
  * @IsGranted("ROLE_STUDENT")
  */
-class StudentController extends AbstractController
+class BookController extends AbstractController
 {
     private BookRepositoryInterface $bookRepository;
+    private BookingService $bookingService;
 
-    public function __construct(BookRepositoryInterface $bookRepository)
+    public function __construct(BookRepositoryInterface $bookRepository, BookingService $bookingService)
     {
         $this->bookRepository = $bookRepository;
-    }
-
-    /**
-     * @Route("/book", name="book")
-     */
-    public function book(): Response
-    {
-        $books = $this->bookRepository->getAllAvailable();
-        return $this->render('front/book/new-arrived.html.twig', [
-            'books' => $books,
-        ]);
+        $this->bookingService = $bookingService;
     }
 
     /**
@@ -38,13 +30,18 @@ class StudentController extends AbstractController
      */
     public function borrow($id = null): Response
     {
-        $user = $this->bookRepository->find($id);
-
-        if (!$user) {
-            throw $this->createNotFoundException('The user does not exist');
+        $book = $this->bookRepository->find($id);
+        if (!$book) {
+            throw $this->createNotFoundException('The book does not exist');
         }
 
-        dd('process');
+        if($this->bookingService->requestForBorrow($book, $this->getUser())){
+            $this->addFlash('success', 'Account updated with success.');
+        }
+
+        $this->addFlash('error', 'Already reserved.');
+
+
         $books = $this->bookRepository->getAllAvailable();
         return $this->render('front/book/new-arrived.html.twig', [
             'books' => $books,
