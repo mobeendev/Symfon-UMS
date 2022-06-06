@@ -50,9 +50,12 @@ class DepartmentType extends AbstractType
             ->add('code', TextType::class, [
                 'required' => true,
                 'attr' => [
-                    'placeholder' => 'Enter name',
-                    'class' => 'input payment-type authcode w-full border mt-2',
-                ],                'constraints' => [
+//                    'pattern' => '/^[a-z]+$/',
+                    'maxlength' => 3,
+                    'placeholder' => 'Enter code',
+                    'class' => 'input authcodecode w-full border mt-2',
+                ],
+                'constraints' => [
                     new NotBlank(),
                 ],
             ])

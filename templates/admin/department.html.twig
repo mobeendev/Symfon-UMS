@@ -28,7 +28,7 @@
                 let edit_url = '';
                 switch(entity) {
                     case 'Department':
-                        edit_url  = "{{ path('admin_department', {id: 'ITEM_ID' }  ) }}"
+                        edit_url  = "{{ path('admin_department_form', {id: 'ITEM_ID' }  ) }}"
                         break;
                     case 'LocationCategory':
                         edit_url  = "{{ path('admin_department', {id: 'ITEM_ID' }  ) }}"
@@ -52,7 +52,7 @@
                     {title:"Name", field:"name",headerFilter:"input", headerFilterPlaceholder : filterPlaceholderText,   width:'42%'},
                     {title:"Country", field:"code",headerFilter:"input", headerFilterPlaceholder : filterPlaceholderText,   width:'37%' },
                 ],
-                paginationSize:3,
+                paginationSize:10,
                 pagination: 'local',
             });
 

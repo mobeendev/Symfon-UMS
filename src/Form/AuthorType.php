@@ -47,16 +47,7 @@ class AuthorType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                 ],
-            ])
-            ->add('submit', SubmitType::class, [
-                'attr' => [
-                    'class' => 'button mt-2 w-20 bg-theme-9 text-white ml-3 navigation',
-                ],
-                'label' => 'Save',
             ]);
-
-
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

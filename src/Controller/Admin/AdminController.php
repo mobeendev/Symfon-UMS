@@ -50,16 +50,14 @@ class AdminController extends BaseController
     /**
      * @Route("/book/form/{id}", name="book_form")
      */
-    public function newBook(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
-    {   
-
+    public function bookForm(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
+    {
         $book = new Book();
         $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
 
-
         if (isset($id) && !empty($id)){
             $book = $bookRepository->find($id);
-            $formInformation = [ 'header_label' => 'Update Class Pack', 'button_label' => 'Back' ];
+            $formInformation = [ 'header_label' => 'Update Book', 'button_label' => 'Back' ];
         }
 
         $form = $this->createForm(BookType::class, $book);
@@ -79,83 +77,33 @@ class AdminController extends BaseController
             $this->addFlash('success', 'Book created with success.');
             return $this->redirectToRoute('admin_book');
         }
-        // dd($form);
 
-        // dd($form->createView());
         return $this->render('admin/book-form.html.twig', [
             'form' => $form->createView(),
             'formInformation' => $formInformation
         ]);
 
     }
-
     /**
-     * @Route("/book/form/edit/{id}", name="book_form_edit")
+     * @Route("/author/form/{id}", name="author_form")
      */
-    public function editBook(Request $request, TagRepository $tagRepository,BookRepository $bookRepository, $id = null): Response
-    {
-        $book = null;
-        if (isset($id) && !empty($id)){
-            $book = $bookRepository->find($id);
-            $formInformation = [ 'header_label' => 'Update Class Pack', 'button_label' => 'Back' ];
-        }
-
-
-//        dd($book);
-
-        $form = $this->createForm(BookType::class, $book);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $this->em->persist($book);
-
-            foreach($book->getBookTags() as $bookTag){
-
-                $book->addBookTag($bookTag);
-                $this->em->persist($book);
-            }
-
-            $this->em->flush();
-            $this->addFlash('success', 'Book created with success.');
-            return $this->redirectToRoute('admin_book');
-        }
-        // dd($form);
-
-        // dd($form->createView());
-        return $this->render('admin/book-form.html.twig', [
-            'form' => $form->createView(),
-            'formInformation' => $formInformation
-        ]);
-
-    }
-
-    /**
-     * @Route("/author/form", name="author_form")
-     */
-    public function newAuthor(Request $request, AuthorRepository $authorRepository): Response
+    public function authorForm(Request $request, AuthorRepository $authorRepository, $id = null): Response
     {
         $author = new Author();
-
-        $form = $this->createForm(AuthorType::class, $author);
-
         $formInformation = [ 'header_label' => 'New Author', 'button_label' => 'Cancel' ];
 
+        if (isset($id) && !empty($id)){
+            $author = $authorRepository->find($id);
+            $formInformation = [ 'header_label' => 'Update Author', 'button_label' => 'Back' ];
+        }
+
+        $form = $this->createForm(AuthorType::class, $author);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-
-//            dd($author);
-//            $articleToUpdate = $authorRepository->find($articleActualise['id']);
-//            if ($articleToUpdate === null) {
-//                // Article does not exist so we need to create a new object
-//            }
-
-
-
             $this->em->persist($author);
             $this->em->flush();
-            $this->addFlash('success', 'Author created with success.');
+            $this->addFlash('success', 'Author updated with success.');
             return $this->redirectToRoute('admin_author');
         }
 
@@ -165,16 +113,12 @@ class AdminController extends BaseController
         ]);
     }
 
-
-
-
      /**
      * @Route("/author", name="author")
      */
     public function author(AuthorRepository $authorRepository, BookRepository $bookRepository, CountryRepository $countryRepository, Request $request): Response
     {
         $authors = $authorRepository->getAuthor($request);
-        //dd($authors);
 
         //Search Filters
         $countries = $countryRepository->findAll();
@@ -195,7 +139,6 @@ class AdminController extends BaseController
         $booksGroupByAuthor = [];
 
         foreach ($books as $book){
-
             $booksGroupByAuthor[$book->getAuthor()->getName()][] = $book;
         }
         return $this->render('admin/book-borrowed.html.twig', [
@@ -203,8 +146,6 @@ class AdminController extends BaseController
         ]);
     }
 
-
-    
      /**
      * @Route("/book", name="book")
      */
@@ -241,6 +182,7 @@ class AdminController extends BaseController
             $this->em->persist($department);
             $this->em->flush();
             $this->addFlash('success', 'Department updated with success.');
+            return $this->redirectToRoute('admin_department');
         }
 
         return $this->render('admin/department-form.html.twig', [
@@ -256,14 +198,7 @@ class AdminController extends BaseController
     public function department(DepartmentRepository $departmentRepository): Response
     {
         $departments = $departmentRepository->findBy([],['id'=>'desc']);
-
-//        $books = $bookRepository->findAll();
-        $booksGroupByAuthor = [];
-
-//        dump($departments);
         $jsonDeparment = [];
-        $jsonLocationCategories = [];
-        $jsonCountries = [];
 
         foreach ($departments as $department) {
             $jsonDeparment[] = [
@@ -276,7 +211,6 @@ class AdminController extends BaseController
 
         $jsonDeparment = json_encode($jsonDeparment);
 
-        dump($jsonDeparment);
         return $this->render('admin/department.html.twig', [
             'departments' => $jsonDeparment,
         ]);

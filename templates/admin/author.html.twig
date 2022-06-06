@@ -105,13 +105,13 @@
           </button>
           <div class="pos-dropdown__dropdown-box dropdown-box">
            <div class="dropdown-box__content box dark:bg-dark-1 p-2">
-            <a href="{{ path('admin_index') }}"
+            <a href="{{ path('admin_author_form',  {id: author.id}) }}"
                class="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md navigation">
              <i data-feather="edit" class="w-4 h-4 mr-2"></i> <span
                      class="check-square">Edit</span> </a>
             <a href="#"
                data-has-related="true"
-               data-item-type="EventOccurrence"
+               data-item-type="author"
                data-item-id="{{ 12 }}"
                class="flex items-center  delete-item text-theme-6 block p-2  text-theme-6 transition duration-300 ease-in-out bg-white dark:bg-dark-2 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
              <i data-feather="trash-2" class="w-4 h-4 mr-2"></i> <span
