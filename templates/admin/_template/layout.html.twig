@@ -1,49 +1,5 @@
 {% extends 'admin/_template/base.html.twig' %}
 {% block body %}
-    <!-- BEGIN: Mobile Menu -->
-    <div class="mobile-menu md:hidden">
-        <div class="mobile-menu-bar">
-            <a href="" class="flex mr-auto">
-                <img alt="123" class="w-6" src="/admin/dist/images/logo.svg">
-            </a>
-            <a href="javascript:;" id="mobile-menu-toggler"> <i data-feather="bar-chart-2" class="w-8 h-8 text-white transform -rotate-90"></i> </a>
-        </div>
-        <ul class="border-t border-theme-24 py-5 hidden">
-            <li>
-                <a href="index.html" class="menu menu--active">
-                    <div class="menu__icon"> <i data-feather="home"></i> </div>
-                    <div class="menu__title"> Dashboard </div>
-                </a>
-            </li>
-            <li>
-                <a href="javascript:;" class="menu">
-                    <div class="menu__icon"> <i data-feather="box"></i> </div>
-                    <div class="menu__title"> Books <i data-feather="chevron-down" class="menu__sub-icon"></i> </div>
-                </a>
-                <ul class="">
-                    <li>
-                        <a href="index.html" class="menu">
-                            <div class="menu__icon"> <i data-feather="activity"></i> </div>
-                            <div class="menu__title"> Schedules </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="top-menu-light-dashboard.html" class="menu">
-                            <div class="menu__icon"> <i data-feather="activity"></i> </div>
-                            <div class="menu__title"> No Shows / Cancellation</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="simple-menu-light-dashboard.html" class="menu">
-                            <div class="menu__icon"> <i data-feather="activity"></i> </div>
-                            <div class="menu__title"> Service Registry </div>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <!-- END: Mobile Menu -->
     <!-- BEGIN: Top Bar -->
     <div class="border-b border-theme-24 -mt-10 md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-10">
         <div class="top-bar-boxed flex items-center">
@@ -86,38 +42,37 @@
                     <div class="top-menu__title"> Dashboard </div>
                 </a>
             </li>
+
             <li>
-                <a  href="{{ path('admin_book')}}" class=" top-menu {{  current_path == 'admin_book' ? 'top-menu--active'}}"    >
-                    <div class="top-menu__icon"><i data-feather="shopping-bag"></i> </div>
-                    <div class="top-menu__title"> Books <i data-feather="chevron-down" class="top-menu__sub-icon"></i> </div>
+                <a href="{{ path('admin_book') }}" class=" top-menu {{  current_path == 'admin_book'? 'top-menu--active'}}"    >
+                    <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
+                    <div class="top-menu__title"> Books </div>
                 </a>
-                <ul class="">
-                    <li>
-                        <a href="{{ path('admin_book') }}" class="top-menu">
-                            <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
-                            <div class="top-menu__title"> Listing </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_tag') }}" class="top-menu">
-                            <div class="top-menu__icon"> <i data-feather="activity"></i> </div>
-                            <div class="top-menu__title"> Tags </div>
-                        </a>
-                    </li>
-                </ul>
             </li>
+
             <li>
                 <a href="{{ path('admin_department') }}" class=" top-menu {{  current_path == 'admin_department'? 'top-menu--active'}}"    >
                     <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
                     <div class="top-menu__title"> Departments </div>
                 </a>
             </li>
+
+
             <li>
                 <a href="{{ path('admin_author') }}" class=" top-menu {{  current_path == 'admin_author'? 'top-menu--active'}}"    >
                     <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
                     <div class="top-menu__title"> Authors </div>
                 </a>
             </li>
+
+            <li>
+                <a href="{{ path('admin_country') }}" class=" top-menu {{  current_path == 'admin_country'? 'top-menu--active'}}"    >
+                    <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
+                    <div class="top-menu__title"> Country </div>
+                </a>
+            </li>
+
+
         </ul>
     </nav>
     <!-- END: Top Menu -->
@@ -125,5 +80,6 @@
     <div class="content">
         {% block content %}
         {% endblock %}
+{#        {{ include('/admin/partials/delete-record-modal.html.twig') }}#}
     </div>
 {% endblock %}

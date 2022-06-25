@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Country
 {   
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }
@@ -78,4 +78,6 @@ class Country
 
         return $this;
     }
+
+
 }

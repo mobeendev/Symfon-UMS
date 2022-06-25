@@ -8,7 +8,7 @@
                 </h2>
             </div>
             <div class="p-5">
-                {{ form_start(form, {'attr' : {'autocomplete' : 'off',novalidate: 'novalidate'}}) }}
+                {{ form_start(form) }}
                 <div class="col-span-12 lg:col-span-12 xxl:col-span-9">
                     <div class="grid grid-cols-12 gap-5">
                        
@@ -24,24 +24,23 @@
 
                           <div class="col-span-12 xl:col-span-3">
                             <div>
-                                {{ form_label(form.age) }}
+                                {{ form_label(form.code) }}
                                 <div class="mt-2">
-                                    {{ form_widget(form.age) }}
+                                    {{ form_widget(form.code) }}
                                 </div>
-                                <div class="text-theme-6 mt-2"> {{ form_errors(form.age) }}</div>
+                                <div class="text-theme-6 mt-2"> {{ form_errors(form.code) }}</div>
                             </div>
                         </div>
 
                         <div class="col-span-12 xl:col-span-3">
                             <div class="mt-2">
-                                {{ form_label(form.country) }}
+                                {{ form_label(form.phone_code) }}
                                 <div class="mt-2">
-                                    {{ form_widget(form.country) }}
+                                    {{ form_widget(form.phone_code) }}
                                 </div>
-                                <div class="text-theme-6 mt-2"> {{ form_errors(form.country) }}</div>
+                                <div class="text-theme-6 mt-2"> {{ form_errors(form.phone_code) }}</div>
                             </div>
                         </div>
-               
                     </div>
                 </div>
                 <div class="col-span-12 xl:col-span-12">
@@ -53,8 +52,8 @@
                 <div class="col-span-12 xl:col-span-12">
                     <div class="intro-y block sm:flex items-center  h-8 mt-5">
                         <div class="flex items-center sm:ml-auto mt-3 mb-3 sm:mt-0">
-                            <a href="{{ path('admin_author') }}" class="button mt-2 w-20 bg-theme-1 text-white ml-3 navigation"> {{button_label}}</a>
-                            <button type="submit" class="button mt-2 w-20 bg-theme-9 text-white ml-3">Save</button>
+                                <a href="{{ path('admin_country') }}" class="button mt-2 w-20 bg-theme-1 text-white ml-3 navigation"> {{button_label}}</a>
+                            <button type="submit" class="button mt-2 w-20 bg-theme-9 text-white ml-3 navigation">Save</button>
                         </div>
                     </div>
                 </div>
