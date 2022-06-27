@@ -8,13 +8,13 @@
         <form class="px-5" action="{{ path('admin_book')}}"  id="tabulator-html-filter-form">
             <div class="px-5 pt-1 mt-2 toggle-filter">
 
-                <div class="font-medium text-base">Search Company</div>
+                <div class="font-medium text-base">Search Tags</div>
                 <div class="grid grid-cols-12 gap-2 row-gap-2 mt-5 ">
 
                     <div class="intro-y  col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-3 xxl:col-span-3">
-                        <div class="mb-2 font-small">Search User</div>
+                        <div class="mb-2 font-small">Search Tag</div>
                         <div class="mb-3 flex items-center">
-                            <input type="text"  class=" input w-full border js-user-autocomplete"  value="{{ app.request.get('user-search') }}" name="user-search" data-autocomplete-url="{{ path('admin_api_authors') }}"  placeholder="Search User by oxpin ...">
+                            <input type="text"  class=" input w-full border js-user-autocomplete"  value="{{ app.request.get('user-search') }}" name="user-search" data-autocomplete-url="{{ path('admin_api_authors') }}"  placeholder="Search tag ...">
                             <input type="hidden" name="user" id="user"  value="{{ app.request.get('user') }}"   >
                             <div class="ml-2 mr-auto">
                                 <div id="ajax_wrapper"><div id="ajax_wrapper_filter"></div></div>
@@ -22,19 +22,6 @@
                         </div>
                         <div class="text-theme-6 mt-2 hidden" id="user-validation-feedback"></div>
                     </div>
-
-
-{#                    <div class="intro-y col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-3 xl:col-span-3 xxl:col-span-3">#}
-{#                        <div class="mb-2 font-small">Type</div>#}
-{#                        <select class="input w-full border flex-1 font-medium select2 autocomplete" id="company_type"  name="company_type" data-placeholder="Select Type" data-search-input-placeholder="Company Type" data-allow-clear="true">#}
-{#                            <option value=""></option>#}
-{#                            {% for company_type in company_types %}#}
-{#                                <option value="{{ company_type }}" >#}
-{#                                    {{ company_type | capitalize  }}#}
-{#                                </option>#}
-{#                            {% endfor %}#}
-{#                        </select>#}
-{#                    </div>#}
 
                     <div class="intro-y col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-3 xl:col-span-3 xxl:col-span-3">
                         <div class="mb-2 font-small">Role</div>
@@ -44,8 +31,7 @@
                             <option value="ROLE_STAFF">ROLE_STAFF</option>
                         </select>
                     </div>
-
-
+                    
                     <div class="intro-y col-span-12 sm:col-span-3  md:col-span-3 lg:col-span-3 xl:col-span-3 xl:col-span-3 xxl:col-span-3">
                         <div class="mb-2 font-small">Status</div>
                         <select class="input w-full border flex-1 font-medium select2 autocomplete" id="status"  name="status" data-placeholder="Select Status" data-search-input-placeholder="Company Status" data-allow-clear="true">
@@ -54,7 +40,6 @@
                             <option value="0">In Active</option>
                         </select>
                     </div>
-
 
                     <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end pb-2 mt-2">
                         <button type="submit" class="button w-24  sm:col-span-6  justify-center block bg-theme-1 text-white ml-2 mr-3 navigation"  >Search</button>

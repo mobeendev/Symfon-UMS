@@ -36,41 +36,99 @@
     {% set current_path = app.request.get('_route') %}
     <nav class="top-nav">
         <ul>
-            <li>
-                <a  href="javascript:;"  class=" top-menu {{  current_path == 'admin_index' ? 'top-menu--active'}}"    >
-                    <div class="top-menu__icon"> <i data-feather="home"></i> </div>
-                    <div class="top-menu__title"> Dashboard </div>
-                </a>
-            </li>
+            {% if is_granted('ROLE_USER') %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li>
+                        <a  href="javascript:;"  class=" top-menu {{  current_path == 'admin_index' ? 'top-menu--active'}}"    >
+                            <div class="top-menu__icon"> <i data-feather="home"></i> </div>
+                            <div class="top-menu__title"> Dashboard </div>
+                        </a>
+                    </li>
 
-            <li>
-                <a href="{{ path('admin_book') }}" class=" top-menu {{  current_path == 'admin_book'? 'top-menu--active'}}"    >
-                    <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
-                    <div class="top-menu__title"> Books </div>
-                </a>
-            </li>
+                    <li>
+                        <a  href="{{ path('admin_book') }}" class=" top-menu {{  current_path == 'admin_book' or current_path == 'admin_book' or current_path == 'admin_book' or current_path == 'admin_book' ? 'top-menu--active'}}"    >
+                            <div class="top-menu__icon"> <i data-feather="user"></i> </div>
+                            <div class="top-menu__title"> Books <i data-feather="chevron-down" class="top-menu__sub-icon"></i> </div>
+                        </a>
+                        <ul class="">
+                            <li>
+                                <a href="{{ path('admin_book') }}" class="top-menu">
+                                    <div class="top-menu__icon"> <i data-feather="activity"></i> </div>
+                                    <div class="top-menu__title"> List Books </div>
+                                </a>
+                            </li>
 
-            <li>
-                <a href="{{ path('admin_department') }}" class=" top-menu {{  current_path == 'admin_department'? 'top-menu--active'}}"    >
-                    <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
-                    <div class="top-menu__title"> Departments </div>
-                </a>
-            </li>
+                            <li>
+                                <a href="{{ path('admin_tag') }}" class="top-menu">
+                                    <div class="top-menu__icon"> <i data-feather="activity"></i> </div>
+                                    <div class="top-menu__title"> Tag </div>
+                                </a>
+                            </li>
 
+                            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                <li>
+                                    <a href="{{ path('admin_country') }}" class="top-menu">
+                                        <div class="top-menu__icon"> <i data-feather="activity"></i> </div>
+                                        <div class="top-menu__title">  Books on Offers </div>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
 
-            <li>
-                <a href="{{ path('admin_author') }}" class=" top-menu {{  current_path == 'admin_author'? 'top-menu--active'}}"    >
-                    <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
-                    <div class="top-menu__title"> Authors </div>
-                </a>
-            </li>
-
+                    <li>
+                        <a href="{{ path('admin_department') }}" class=" top-menu {{  current_path == 'admin_department'? 'top-menu--active'}}"    >
+                            <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
+                            <div class="top-menu__title"> Departments </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_author') }}" class=" top-menu {{  current_path == 'admin_author'? 'top-menu--active'}}"    >
+                            <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
+                            <div class="top-menu__title"> Authors </div>
+                        </a>
+                    </li>
+                {% endif %}
             <li>
                 <a href="{{ path('admin_country') }}" class=" top-menu {{  current_path == 'admin_country'? 'top-menu--active'}}"    >
                     <div class="top-menu__icon"> <i data-feather="shopping-bag"></i> </div>
                     <div class="top-menu__title"> Country </div>
                 </a>
             </li>
+            {% endif %}
+
+            {% if is_granted('ROLE_USER') %}
+                <li>
+                    <a  href="{{ path('admin_country') }}" class=" top-menu {{  current_path == 'admin_country' or current_path == 'admin_country' or current_path == 'admin_country' or current_path == 'admin_country' ? 'top-menu--active'}}"    >
+                        <div class="top-menu__icon"> <i data-feather="user"></i> </div>
+                        <div class="top-menu__title"> Staff <i data-feather="chevron-down" class="top-menu__sub-icon"></i> </div>
+                    </a>
+                    <ul class="">
+                        <li>
+                            <a href="{{ path('admin_country') }}" class="top-menu">
+                                <div class="top-menu__icon"> <i data-feather="activity"></i> </div>
+                                <div class="top-menu__title"> List Staff </div>
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_SUPER_ADMIN') %}
+                            <li>
+                                <a href="{{ path('admin_country') }}" class="top-menu">
+                                    <div class="top-menu__icon"> <i data-feather="activity"></i> </div>
+                                    <div class="top-menu__title"> Salaries </div>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('admin_country') }}" class="top-menu">
+                                    <div class="top-menu__icon"> <i data-feather="activity"></i> </div>
+                                    <div class="top-menu__title"> Memberships </div>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            {% endif %}
 
 
         </ul>

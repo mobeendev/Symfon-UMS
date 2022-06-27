@@ -5,10 +5,12 @@ namespace App\Controller\Admin;
 use App\Controller\BaseController;
 use App\Entity\Author;
 use App\Entity\Book;
+use App\Entity\Country;
 use App\Entity\Department;
 use App\Entity\Tag;
 use App\Form\AuthorType;
 use App\Form\BookType;
+use App\Form\CountryType;
 use App\Form\DepartmentType;
 use App\Form\TagsType;
 use App\Repository\AuthorRepository;
@@ -189,7 +191,6 @@ class AdminController extends BaseController
 
         return $this->render('admin/department-form.html.twig', [
             'form' => $form->createView(),
-            'formIcon' => $formIcon != null ? $formIcon->createView() : '',
             'formInformation' => $formInformation
         ]);
     }
@@ -200,7 +201,7 @@ class AdminController extends BaseController
 
     public function department(DepartmentRepository $departmentRepository): Response
     {
-        $departments = $departmentRepository->findBy([],['id'=>'desc']);
+        $departments = $departmentRepository->findBy([], ['id' => 'desc']);
         $jsonDeparment = [];
 
         foreach ($departments as $department) {
@@ -216,19 +217,6 @@ class AdminController extends BaseController
 
         return $this->render('admin/department.html.twig', [
             'departments' => $jsonDeparment,
-        ]);
-    }
-
-
-    /**
-     * @Route("/tag", name="tag")
-     */
-    public function tag(TagRepository $tagRepository): Response
-    {
-        $tags = $tagRepository->findAll();
-
-        return $this->render('admin/tag.html.twig', [
-            'tags' => $tags,
         ]);
     }
 
@@ -258,6 +246,72 @@ class AdminController extends BaseController
         return $this->render('admin/tag-form.html.twig', [
             'form' => $form->createView(),
             'formInformation' => $formInformation,
+        ]);
+    }
+
+    /**
+     * @Route("/tag", name="tag")
+     */
+    public function tag(TagRepository $tagRepository): Response
+    {
+        $tags = $tagRepository->findAll();
+
+        return $this->render('admin/tag.html.twig', [
+            'tags' => $tags,
+        ]);
+    }
+    /**
+     * @Route("/country/form/{id}", name="country_form")
+     */
+    public function formCountry(Request $request, CountryRepository $countryRepository, $id = null): Response
+    {
+        $country = new Country();
+        $formInformation = [ 'header_label' => 'New Country', 'button_label' => 'Cancel' ];
+        $formIcon = null;
+
+        if (isset($id) && !empty($id)){
+            $country = $countryRepository->find($id);
+            $formInformation = [ 'header_label' => 'Update Country', 'button_label' => 'Back' ];
+        }
+
+        $form = $this->createForm(CountryType::class, $country);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($country);
+            $this->em->flush();
+            $this->addFlash('success', 'Country updated with success.');
+            return $this->redirectToRoute('admin_country');
+        }
+
+        return $this->render('admin/country-form.html.twig', [
+            'form' => $form->createView(),
+            'formInformation' => $formInformation
+        ]);
+    }
+
+    /**
+     * @Route("/country", name="country")
+     */
+    public function country(CountryRepository $countryRepository): Response
+    {
+        $countries = $countryRepository->findBy([],['id'=>'desc']);
+        $jsonCountries = [];
+
+        foreach ($countries as $country) {
+            $jsonCountries[] = [
+                'id' => $country->getId(),
+                'name' => $country->getName(),
+                'code' => $country->getCode(),
+                'phone_code' => $country->getPhoneCode(),
+                'type' => 'Country',
+            ];
+        }
+
+        $jsonCountries = json_encode($jsonCountries);
+
+        return $this->render('admin/country.html.twig', [
+            'countries' => $jsonCountries,
         ]);
     }
 }
