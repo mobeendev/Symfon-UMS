@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use function PHPUnit\Framework\throwException;
 
 /**
  * @Route("/book", name="book_")
@@ -26,20 +27,26 @@ class BookController extends AbstractController
     }
 
     /**
-     * @Route("/borrow/{id}", name="borrow")
+     * @Route("/borrow/{id?}", name="borrow")
      */
     public function borrow($id = null): Response
     {
-        $book = $this->bookRepository->find($id);
-        if (!$book) {
-            throw $this->createNotFoundException('The book does not exist');
-        }
+        if($id && $book = $this->bookRepository->find($id)){
+            if (!$book) {
+                throw $this->createNotFoundException('The book does not exist');
+            }
 
-        if($this->bookingService->requestForBorrow($book, $this->getUser())){
-            $this->addFlash('success', 'Account updated with success.');
-        }
+            if($this->bookingService->checkIfAvailable($book, $this->getUser())){
+                $this->addFlash('error', 'Already reserved.');
+                return $this->redirectToRoute('book_borrow', ['id' =>  null]);
+            }
 
-        $this->addFlash('error', 'Already reserved.');
+            if($this->bookingService->requestForBorrow($book, $this->getUser())){
+                $this->addFlash('success', 'Book request submitted with success.');
+                return $this->redirectToRoute('book_borrow', ['id' =>  null]);
+            }
+
+        }
 
 
         $books = $this->bookRepository->getAllAvailable();

@@ -21,6 +21,7 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
     App\Interface\BookRepositoryInterface: '@App\Repository\BookRepository'
+    App\Interface\BookingRequestRepositoryInterface: '@App\Repository\BookingRequestRepository'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

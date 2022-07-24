@@ -7,7 +7,7 @@ namespace App\Interfaces;
 use App\Entity\Book;
 use App\Entity\User;
 
-interface BorrowRepositoryInterface
+interface BookingRequestRepositoryInterface
 {
     public function isBookAvailable(Book $book, User $user);
 }

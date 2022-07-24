@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Book;
 use App\Entity\BookingRequest;
+use App\Entity\User;
+use App\Interfaces\BookingRequestRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -16,7 +19,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method BookingRequest[]    findAll()
  * @method BookingRequest[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BookingRequestRepository extends ServiceEntityRepository
+class BookingRequestRepository extends ServiceEntityRepository implements BookingRequestRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -47,32 +50,16 @@ class BookingRequestRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return BookingRequest[] Returns an array of BookingRequest objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function isBookAvailable(Book $book, User $user)
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('br')
+            ->select('count(br.id)')
+            ->andWhere('br.book = :book')
+            ->andWhere('br.user = :user')
+            ->setParameter('book', $book)
+            ->setParameter('user', $user)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getSingleScalarResult()
+            ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?BookingRequest
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

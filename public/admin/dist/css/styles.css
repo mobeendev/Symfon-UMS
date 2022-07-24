@@ -1,0 +1,31 @@
+/*tabulator-action styles*/
+.tabulator-action-btn{
+    float: right;
+    display: inline;
+    margin-left: 3px;
+    width: 10px;
+    padding: 4px;
+}
+.tabulator-action-cell{
+    width: 10px;
+    padding: 10px !important;
+    margin-left: 4px !important;
+}
+.cell-class{
+    background: orange;
+    width: 10px;
+    padding: 10px !important;
+    margin-left: 4px !important;
+}
+.tabulator {
+    height: 89% !important;
+}
+.tabulator-pages {
+    padding-top: 2px;
+    padding-bottom: 7px;
+    margin: auto !important;
+}
+.tabulator-page {
+    height: 35px;
+    padding-top: 21px;
+}

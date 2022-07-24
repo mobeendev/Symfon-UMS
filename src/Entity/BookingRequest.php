@@ -34,6 +34,17 @@ class BookingRequest
      */
     private $requestDate;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $status;
+
+    public function __construct()
+    {
+        $this->status = 0;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +82,18 @@ class BookingRequest
     public function setRequestDate(\DateTimeInterface $requestDate): self
     {
         $this->requestDate = $requestDate;
+
+        return $this;
+    }
+
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
