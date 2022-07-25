@@ -63,4 +63,45 @@ class BookRepository extends ServiceEntityRepository implements BookRepositoryIn
     {
         return $id;
     }
+
+    public function getBookByType($type = null)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('b')
+            ->from('App:Book', 'b')
+            ->leftJoin(
+                'App:BookingRequest',
+                'br',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'br.book = b'
+            );
+
+        if (isset($type) && !empty($type))
+        {
+            $status = null;
+            switch ($type) {
+                case 'requested':
+                    $status = Book::STATUS_REQUESTED;
+                    break;
+                case 'rented':
+                    $status = Book::STATUS_RENTED;
+                    break;
+                case 'returned':
+                    $status = Book::STATUS_RETURNED;
+                    break;
+            }
+            $qb->andWhere('br.status = :status')->setParameter('status', $status);
+        }
+
+
+//            ->andWhere('br.status = 1');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getRequested()
+    {
+        // TODO: Implement getRequested() method.
+    }
 }

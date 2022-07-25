@@ -1,0 +1,55 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid px-4">
+                <h1 class="mt-4">Books</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">New Books Listing</li>
+                </ol>
+             <div class="row">
+
+            <div class="col-12">
+                {% for message in app.flashes('error') %}
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for message in app.flashes('success') %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">Day</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Author(s)</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <th scope="row">{{ book.id  }}</th>
+                        <td>{{ book.title }}</td>
+                        <td>- {{ book.bookTags[0].author }}</td>
+                        <td>- {{ book.price }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
+                            <a class="btn btn-success" href="{{ path('book_borrow',{id:book.id} ) }}" role="button"><i class="fas fa-plus"></i> Borrow</a>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

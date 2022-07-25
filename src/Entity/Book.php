@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Book
 {
+    const STATUS_RENTED = 0;
+    const STATUS_REQUESTED = 1;
+    const STATUS_RETURNED = 2;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
