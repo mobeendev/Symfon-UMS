@@ -6,6 +6,7 @@ use App\Interfaces\BookRepositoryInterface;
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Book|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,43 +21,25 @@ class BookRepository extends ServiceEntityRepository implements BookRepositoryIn
         parent::__construct($registry, Book::class);
     }
 
-    // /**
-    //  * @return Book[] Returns an array of Book objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getAllAvailable($page = 1, int $maxResults)
     {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Book
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-    public function getAllAvailable()
-    {
-        return $this->createQueryBuilder('b')
+        $qb = $this->createQueryBuilder('b');
+        $qb
+            ->select('b')
             ->andWhere('b.isBooked IS NULL')
             ->orWhere('b.isBooked = 0')
-            ->setMaxResults(10)
+            ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult()
             ;
+
+        $paginator = new Paginator($qb);
+
+        if (($paginator->count() <= $maxResults) && 1 != $page) {
+            return [];
+        }
+
+        return $paginator;
     }
 
     public function isBookAvailable($id)
@@ -64,7 +47,7 @@ class BookRepository extends ServiceEntityRepository implements BookRepositoryIn
         return $id;
     }
 
-    public function getBookByType($type = null)
+    public function getBookByType(string $type = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb

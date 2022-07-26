@@ -1,0 +1,62 @@
+<div class="intro-y flex flex-wrap sm:flex-row sm:flex-no-wrap items-center mt-3">
+   {% if data  %}
+     <ul class="pagination">
+      {% if pagination.page > 1 %}
+      <li>
+         <a class="pagination__link" href="{{ path(pagination.routeName, app.request.query.all|merge({'page': 1})) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-left w-4 h-4">
+               <polyline points="11 17 6 12 11 7"></polyline>
+               <polyline points="18 17 13 12 18 7"></polyline>
+            </svg>
+         </a>
+      </li>
+      <li>
+         <a class="pagination__link" href="{{ path(pagination.routeName,app.request.query.all|merge({'page': pagination.page-1})) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left w-4 h-4">
+               <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+         </a>
+      </li>
+      {% endif %}
+      {% for p in range(max(pagination.page-2, 1), min(pagination.page+2, pagination.pagesNumber)) %}
+      <li> 
+         {% if app.request.attributes.get('_route_params')['page'] ==  p %}
+         <a  class="pagination__link pagination__link--active" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': p})) }}">
+         {{ p }}
+         </a>   
+         {% else %}
+            <a class="pagination__link"  href="{{ path(pagination.routeName,app.request.query.all|merge({'page': p})) }}">
+         {{ p }} 
+         </a> 
+         {% endif %}
+      </li>
+      {% endfor %}
+      {% if pagination.page < pagination.pagesNumber %}
+      <li>
+         <a class="pagination__link"  href="{{ path(pagination.routeName,app.request.query.all|merge({'page': pagination.page+1})) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right w-4 h-4">
+               <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+         </a>
+      </li>
+      <li>
+         <a class="pagination__link"  href="{{ path(pagination.routeName,app.request.query.all|merge({'page': pagination.pagesNumber})) }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-right w-4 h-4">
+               <polyline points="13 17 18 12 13 7"></polyline>
+               <polyline points="6 17 11 12 6 7"></polyline>
+            </svg>
+         </a>
+      </li>
+      </a>
+      {% endif %}
+   </ul>
+   {% else %}
+   <div class="col-span-12 xl:col-span-8 mt-1">
+      <div class="intro-y block sm:flex items-center h-10">
+         <p class="text-lg font-small truncate mr-5">
+            No record found
+         </p>
+      </div>
+   </div>
+   {% endif %}
+</div>

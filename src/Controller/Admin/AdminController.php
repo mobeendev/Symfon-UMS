@@ -151,17 +151,24 @@ class AdminController extends BaseController
     }
 
      /**
-     * @Route("/book", name="book")
+     * @Route("/book", name="book", defaults={"page": "1"})
+      * @Route("/book/page/{page}", name="book_paginated")
      */
-    public function book(BookRepository $bookRepository): Response
+    public function book(BookRepository $bookRepository, int $page = 1): Response
     {
-        $books = $bookRepository->findAll();
-        $booksGroupByAuthor = [];
+        $booksListing = $bookRepository->getAllAvailable($page, $this->maxNbrPerPage);
 
-        foreach ($books as $book){
-        }
+        $paginationBookListing = [
+            'page' => $page,
+            'pagesNumber' => ceil(count($booksListing) / $this->maxNbrPerPage),
+            'routeName' => 'admin_book_paginated',
+            'routeParams' => [],
+        ];
+
         return $this->render('admin/book.html.twig', [
-            'books' => $books,
+            'books' => $booksListing,
+            'pagination' => $paginationBookListing,
+            'page' => $page,
         ]);
     }
 

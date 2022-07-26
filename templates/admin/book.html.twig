@@ -30,11 +30,43 @@
        <a data-toggle="tab" data-target="#class" href="{{ path('admin_index') }}"
           class="flex-1 py-2 mt-2 flat-md text-center navigation">Currently Available</a>
       </div>
+     </div>
+    </div>
+    <div class="col-span-12 sm:col-span-12 md:col-span-4  xs:col-span-12 xl:col-span-4 xxl:col-span-3 intro-y box mt-2 h-12">
+     <div class="grid grid-cols-12 gap-5 pos__tabs nav-tabs justify-center flex">
+      <div class="col-span-12 flex  items-center">
+       <a data-toggle="tab" data-target="#class" href="{{ path('admin_index') }}"
+          class="flex-1 py-2 mt-2 flat-md text-center navigation">Borrow Request</a>
+      </div>
+     </div>
+    </div>
+    <div class="col-span-12 sm:col-span-12 md:col-span-4  xs:col-span-12 xl:col-span-4 xxl:col-span-3 intro-y box mt-2 h-12">
+     <div class="grid grid-cols-12 gap-5 pos__tabs nav-tabs justify-center flex">
+      <div class="col-span-12 flex  items-center">
+       <a data-toggle="tab" data-target="#class" href="{{ path('admin_index') }}"
+          class="flex-1 py-2 mt-2 flat-md text-center navigation">Already Borrowed</a>
+      </div>
 
      </div>
     </div>
+    <div class="col-span-12 sm:col-span-12 md:col-span-4  xs:col-span-12 xl:col-span-4 xxl:col-span-3 intro-y box mt-2 h-12">
+     <div class="grid grid-cols-12 gap-5 pos__tabs nav-tabs justify-center flex">
+      <div class="col-span-12 flex  items-center">
+       <a data-toggle="tab" data-target="#class" href="{{ path('admin_index') }}"
+          class="flex-1 py-2 mt-2 flat-md text-center navigation">Already Borrowed</a>
+      </div>
 
+     </div>
+    </div>
+    <div class="col-span-12 sm:col-span-12 md:col-span-4  xs:col-span-12 xl:col-span-4 xxl:col-span-3 intro-y box mt-2 h-12">
+     <div class="grid grid-cols-12 gap-5 pos__tabs nav-tabs justify-center flex">
+      <div class="col-span-12 flex  items-center">
+       <a data-toggle="tab" data-target="#class" href="{{ path('admin_index') }}"
+          class="flex-1 py-2 mt-2 flat-md text-center navigation">Already Borrowed</a>
+      </div>
 
+     </div>
+    </div>
    </div>
   </div>
 
@@ -85,8 +117,8 @@
        </div>
       </div>
      {% endfor %}
-    {#                {{ include('/admin/partials/pagination.html.twig') }}#}
- </div>
+   {{ include('/admin/partials/pagination.html.twig', {data: books|length}) }}
+  </div>
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript">
